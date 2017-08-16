@@ -41,6 +41,11 @@ namespace Vodovoz.Domain
 
 		public virtual List<string> ParseNextElements()
 		{
+			if(this.NextElementsUnparced == "")
+			{
+				return new List<string>();
+			}
+
 			return this.NextElementsUnparced.Split(',').ToList();
 		}
 

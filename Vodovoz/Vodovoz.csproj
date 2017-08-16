@@ -110,9 +110,6 @@
     <Reference Include="NetTopologySuite.IO.GeoTools">
       <HintPath>..\packages\NetTopologySuite.IO.1.14.0.1\lib\net45\NetTopologySuite.IO.GeoTools.dll</HintPath>
     </Reference>
-    <Reference Include="NetTopologySuite.IO.MsSqlSpatial">
-      <HintPath>..\packages\NetTopologySuite.IO.1.14.0.1\lib\net45\NetTopologySuite.IO.MsSqlSpatial.dll</HintPath>
-    </Reference>
     <Reference Include="NetTopologySuite.IO.PostGis">
       <HintPath>..\packages\NetTopologySuite.IO.1.14.0.1\lib\net45\NetTopologySuite.IO.PostGis.dll</HintPath>
     </Reference>
@@ -142,6 +139,9 @@
     </Reference>
     <Reference Include="PowerCollections">
       <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.MsSqlSpatial">
+      <HintPath>..\packages\NetTopologySuite.IO.1.14.0.1\lib\net45\NetTopologySuite.IO.MsSqlSpatial.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -678,6 +678,10 @@
     <Compile Include="Dialogs\Logistic\DeliveryDayScheduleDlg.cs" />
     <Compile Include="gtk-gui\Vodovoz.Dialogs.Logistic.DeliveryDayScheduleDlg.cs" />
     <Compile Include="Additions\Logistic\RouteOptimization\PossibleTrip.cs" />
+    <Compile Include="Dialogs\DialogueScriptDlg.cs" />
+    <Compile Include="gtk-gui\Vodovoz.Dialogs.DialogueScriptDlg.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueBaseWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueBaseWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -824,6 +828,7 @@
     <Folder Include="ServiceDialogs\Chat\" />
     <Folder Include="ServiceDialogs\Database\" />
     <Folder Include="Additions\Logistic\RouteOptimization\" />
+    <Folder Include="ViewWidgets\DialogueScriptWidgets\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

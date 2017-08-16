@@ -7,6 +7,7 @@ using Dialogs.Employees;
 using Vodovoz.Dialogs.DocumentDialogs;
 using QSProjectsLib;
 using Vodovoz.Dialogs.Logistic;
+using Vodovoz.Dialogs;
 
 public partial class MainWindow : Window
 {
@@ -46,6 +47,7 @@ public partial class MainWindow : Window
 	Action ActionRouteListAddressesTransferring;
 //	Action ActionTransferOperationDlg;
 	Action ActionTransferOperationJournal;
+	Action ActionDialogueScriptDlg;
 
 	public void BuildToolbarActions ()
 	{
@@ -54,6 +56,7 @@ public partial class MainWindow : Window
 		ActionOrdersTable = new Action ("ActionOrdersTable", "Журнал заказов", null, "table");
 		ActionAddOrder = new Action ("ActionAddOrder", "Новый заказ", null, "table");
 		ActionLoadOrders = new Action("ActionLoadOrders", "Загрузить из 1С", null, "table");
+		ActionDialogueScriptDlg = new Action("ActionDialogueScriptDlg", "Скрипт диалога", null, "table");
 		//Сервис
 		ActionServiceClaims = new Action ("ActionServiceTickets", "Журнал заявок", null, "table");
 		//Склад
@@ -131,6 +134,7 @@ public partial class MainWindow : Window
 		w1.Add(ActionRouteListAddressesTransferring, null);
 //		w1.Add(ActionTransferOperationDlg, null);
 		w1.Add(ActionTransferOperationJournal, null);
+		w1.Add(ActionDialogueScriptDlg, null);
 		UIManager.InsertActionGroup (w1, 0);
 		#endregion
 		#region Creating events
@@ -170,6 +174,7 @@ public partial class MainWindow : Window
 		ActionRouteListAddressesTransferring.Activated += ActionRouteListAddressesTransferring_Activated;
 //		ActionTransferOperationDlg.Activated += ActionTransferOperationDlg_Activated;
 		ActionTransferOperationJournal.Activated += ActionTransferOperationJournal_Activated;
+		ActionDialogueScriptDlg.Activated += ActionDialogueScriptDlg_Activated;
 		#endregion
 	}
 
@@ -451,5 +456,10 @@ public partial class MainWindow : Window
 		tdiMain.OpenTab(
 			ReferenceRepresentation.GenerateHashName<TransferOperationsVM>(),
 			() => new ReferenceRepresentation(new TransferOperationsVM()).CustomTabName("Переносы между точками доставки").Buttons(ReferenceButtonMode.CanAll)		);
+	}
+
+	void ActionDialogueScriptDlg_Activated (object sender, System.EventArgs e)
+	{
+		tdiMain.AddTab(new DialogueScriptDlg());
 	}
 }
