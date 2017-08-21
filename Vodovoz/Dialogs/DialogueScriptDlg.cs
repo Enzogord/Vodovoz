@@ -11,6 +11,7 @@ namespace Vodovoz.Dialogs
 	public partial class DialogueScriptDlg : Gtk.Bin, ITdiTab
 	{
 		Dictionary<string, ScriptTreeElement> scriptTreeElements;
+		List<ScriptTreeObject> scriptTreeObjects = new List<ScriptTreeObject>();
 		IUnitOfWork UoW;
 
 		public DialogueScriptDlg()
@@ -76,6 +77,11 @@ namespace Vodovoz.Dialogs
 
 		void OnScriptElementDone(object sender, ScriptElementDoneEventArgs e)
 		{
+			if(e.Result != null)
+			{
+				scriptTreeObjects.Add(e.Result);
+			}
+
 			if(e.NextElement == null)
 			{
 				return;

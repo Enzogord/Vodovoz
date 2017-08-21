@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using QSOrmProject;
 using QSWidgetLib;
@@ -16,6 +16,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		List<RadioButtonId<ScriptTreeElement>> subElements = new List<RadioButtonId<ScriptTreeElement>>();
 		IUnitOfWork UoW;
 		ScriptTreeElement next;
+		ScriptTreeObject result = null;
 		bool nextElementSet = true, 		// Устанавливает, выбран ли следующий элемент. Становится false, если есть саб-элементы.
 				customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
 				widgetDone = false;			// Устанавливает, закончена ли работа с виджетом.
@@ -126,7 +127,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			widgetDone = true;
 			SetButtonNextParameters();
-			ScriptElementDone(this, new ScriptElementDoneEventArgs(next));
+			ScriptElementDone(this, new ScriptElementDoneEventArgs(next, result));
 		}
 
 		void OnSubElementRadioButtonActivated(object sender, EventArgs e)
@@ -160,10 +161,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	public class ScriptElementDoneEventArgs : EventArgs
 	{
 		public ScriptTreeElement NextElement { get; private set; }
+		public ScriptTreeObject Result { get; private set; }
 
-		public ScriptElementDoneEventArgs(ScriptTreeElement nextElement)
+		public ScriptElementDoneEventArgs(ScriptTreeElement nextElement, ScriptTreeObject result)
 		{
 			NextElement = nextElement;
+			Result = result;
 		}
 	}
 }

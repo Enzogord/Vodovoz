@@ -408,6 +408,7 @@
     <Compile Include="Domain\Logistic\IDistrictPriority.cs" />
     <Compile Include="Domain\ScriptTreeElement.cs" />
     <Compile Include="HibernateMapping\ScriptTreeElementMap.cs" />
+    <Compile Include="Domain\ScriptTreeObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
