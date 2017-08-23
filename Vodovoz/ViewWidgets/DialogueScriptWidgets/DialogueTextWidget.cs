@@ -4,7 +4,7 @@ using Vodovoz.Domain;
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	[System.ComponentModel.ToolboxItem(true)]
-	public partial class DialogueTextWidget : Gtk.Bin
+	public partial class DialogueTextWidget : Gtk.Bin, IDialogueWidget
 	{
 		string resultString;
 
@@ -39,26 +39,6 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 			resultString = entryText.Text;
 			SendResult();
-		}
-	}
-
-	public class SubWidgetDoneEventArgs : EventArgs
-	{
-		public ScriptTreeObject Result;
-
-		public SubWidgetDoneEventArgs(ScriptTreeObject result)
-		{
-			Result = result;
-		}
-	}
-
-	public class TextCorrectionsPresentEventArgs : EventArgs
-	{
-		public string Corrections { get; private set; }
-
-		public TextCorrectionsPresentEventArgs(string corrections)
-		{
-			Corrections = corrections;
 		}
 	}
 }

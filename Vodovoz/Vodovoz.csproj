@@ -684,6 +684,7 @@
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueBaseWidget.cs" />
     <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueTextWidget.cs" />
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueTextWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\IDialogueWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
