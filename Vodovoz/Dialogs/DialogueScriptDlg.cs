@@ -11,7 +11,7 @@ namespace Vodovoz.Dialogs
 	public partial class DialogueScriptDlg : Gtk.Bin, ITdiTab
 	{
 		Dictionary<string, ScriptTreeElement> scriptTreeElements;
-		List<ScriptTreeObject> scriptTreeObjects = new List<ScriptTreeObject>();
+		Dictionary<string, ScriptTreeObject> scriptTreeObjects = new Dictionary<string, ScriptTreeObject>();
 		IUnitOfWork UoW;
 
 		public DialogueScriptDlg()
@@ -35,6 +35,7 @@ namespace Vodovoz.Dialogs
 			}
 
 			firstElement.ScriptElementDone += OnScriptElementDone;
+			firstElement.ScriptElementChanged += OnScriptElementChanged;
 			firstElement.Show();
 			vbox2.PackStart(firstElement, false, true, 0);
 		}
@@ -79,7 +80,7 @@ namespace Vodovoz.Dialogs
 		{
 			if(e.Result != null)
 			{
-				scriptTreeObjects.Add(e.Result);
+				scriptTreeObjects[e.CurrentElement] = e.Result;
 			}
 
 			if(e.NextElement == null)
@@ -88,6 +89,14 @@ namespace Vodovoz.Dialogs
 			}
 
 			NextElement(e.NextElement);
+		}
+
+		void OnScriptElementChanged(object sender, ScriptElementDoneEventArgs e)
+		{
+			if(e.Result != null) 
+			{
+				scriptTreeObjects[e.CurrentElement] = e.Result;
+			}
 		}
 	
 

@@ -17,7 +17,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		IUnitOfWork UoW;
 		ScriptTreeElement next;
 		ScriptTreeObject result = null;
-		bool nextElementSet = true, 		// Устанавливает, выбран ли следующий элемент. Становится false, если есть саб-элементы.
+		bool nextElementSet = true,         // Устанавливает, выбран ли следующий элемент. Становится false, если есть саб-элементы.
 				customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
 				widgetDone = false;			// Устанавливает, закончена ли работа с виджетом.
 
@@ -25,6 +25,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		Gtk.Button buttonNext;
 
 		public event EventHandler<ScriptElementDoneEventArgs> ScriptElementDone;
+		public event EventHandler<ScriptElementDoneEventArgs> ScriptElementChanged;
 
 		public DialogueBaseWidget(ScriptTreeElement ste)
 		{
@@ -51,6 +52,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			vboxContainer.PackEnd(hboxBottom, true, true, 0);
 
 			FillSubElements();
+			AddSubWidget();
 			SetButtonNextParameters();
 		}
 
@@ -109,6 +111,17 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			nextElementSet = false;
 		}
 
+		public void AddSubWidget()
+		{
+			if(ste.Widget != DialogueScriptWidget.nottext){
+				var subWidget = new DialogueTextWidget();
+				subWidget.SubWidgetDone += OnSubWidgetDone;
+				subWidget.Show();
+				vboxContainer.PackEnd(subWidget);
+				customActionDone = false;
+			}
+		}
+
 		/// <summary>
 		/// Устанавливает элемент, следующий после текущего.
 		/// </summary>
@@ -127,7 +140,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			widgetDone = true;
 			SetButtonNextParameters();
-			ScriptElementDone(this, new ScriptElementDoneEventArgs(next, result));
+			ScriptElementDone(this, new ScriptElementDoneEventArgs(ste.Name, next, result));
 		}
 
 		void OnSubElementRadioButtonActivated(object sender, EventArgs e)
@@ -147,6 +160,20 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		}
 
+		void OnSubWidgetDone(object sender, SubWidgetDoneEventArgs e)
+		{
+			result = e.Result;
+
+			if(customActionDone && widgetDone)
+			{
+				ScriptElementChanged(this, new ScriptElementDoneEventArgs(ste.Name, next, result)); // TODO Исправить NullPointerException, потом удалить изменение сенситивности саб-виджета.
+			}
+
+			customActionDone = true;
+			(sender as DialogueTextWidget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
+			SetButtonNextParameters();
+		}
+
 		/// <summary>
 		/// Устанавливает параметры кнопки "Далее" (возможность нажать и надпись).
 		/// </summary>
@@ -160,11 +187,13 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 	public class ScriptElementDoneEventArgs : EventArgs
 	{
+		public string CurrentElement { get; private set; }
 		public ScriptTreeElement NextElement { get; private set; }
 		public ScriptTreeObject Result { get; private set; }
 
-		public ScriptElementDoneEventArgs(ScriptTreeElement nextElement, ScriptTreeObject result)
+		public ScriptElementDoneEventArgs(string currentElement, ScriptTreeElement nextElement, ScriptTreeObject result)
 		{
+			CurrentElement = currentElement;
 			NextElement = nextElement;
 			Result = result;
 		}
