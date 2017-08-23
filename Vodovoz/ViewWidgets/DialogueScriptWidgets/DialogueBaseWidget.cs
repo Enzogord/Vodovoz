@@ -166,7 +166,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 			if(customActionDone && widgetDone)
 			{
-				this.ScriptElementChanged?.Invoke(this, new ScriptElementDoneEventArgs(ste.Name, next, result)); // TODO Исправить NullPointerException, потом удалить изменение сенситивности саб-виджета.
+				this.ScriptElementChanged?.Invoke(this, new ScriptElementDoneEventArgs(ste.Name, next, result));
 			}
 
 			customActionDone = true;
@@ -187,7 +187,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		/// <summary>
 		/// Получить тип сабвиджета.
 		/// </summary>
-		/// <returns>Тип сабвиджета, если он определён, и null, если нет или nottext (TODO: исправить на default).</returns>
+		/// <returns>Тип сабвиджета, если он определён, и null, если нет или nowidget.</returns>
 		/// <param name="widgetType">Енам с типом виджета.</param>
 		IDialogueWidget GetSubWidgetType(DialogueScriptWidget widgetType)
 		{
@@ -195,6 +195,20 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			{
 				case DialogueScriptWidget.text:
 					return new DialogueTextWidget();
+				case DialogueScriptWidget.counterparty:
+					return new DialogueCounterpartyWidget();
+				case DialogueScriptWidget.deliverypoint:
+					return new DialogueDeliveryPointWidget();
+				case DialogueScriptWidget.datetime:
+					return new DialogueDateTimeWidget();
+				case DialogueScriptWidget.dateschedule:
+					return new DialogueDateScheduleWidget();
+				case DialogueScriptWidget.checkschedule:
+					return new DialogueCheckScheduleWidget();
+				case DialogueScriptWidget.orderrepeat:
+					return new DialogueOrderRepeatWidget();
+				case DialogueScriptWidget.checkemptybottles:
+					return new DialogueCheckEmptyBottlesWidget();
 				default:
 					return null;
 			}

@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -57,7 +57,14 @@ namespace Vodovoz.Domain
 
 	public enum DialogueScriptWidget
 	{
+		nowidget,
 		text,
-		nottext
+		counterparty,
+		deliverypoint,
+		datetime,
+		dateschedule,
+		checkschedule,
+		orderrepeat,
+		checkemptybottles
 	}
 }

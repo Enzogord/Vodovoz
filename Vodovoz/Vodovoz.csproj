@@ -685,6 +685,20 @@
     <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueTextWidget.cs" />
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueTextWidget.cs" />
     <Compile Include="ViewWidgets\DialogueScriptWidgets\IDialogueWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueCounterpartyWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCounterpartyWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueDeliveryPointWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueDeliveryPointWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueDateTimeWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueDateTimeWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueDateScheduleWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueDateScheduleWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueCheckScheduleWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCheckScheduleWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueOrderRepeatWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueOrderRepeatWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueCheckEmptyBottlesWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCheckEmptyBottlesWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
