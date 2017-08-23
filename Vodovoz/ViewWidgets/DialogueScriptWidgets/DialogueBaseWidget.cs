@@ -52,7 +52,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			vboxContainer.PackEnd(hboxBottom, true, true, 0);
 
 			FillSubElements();
-			AddSubWidget();
+			AddSubWidget(GetSubWidgetType(ste.Widget));
 			SetButtonNextParameters();
 		}
 
@@ -111,13 +111,13 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			nextElementSet = false;
 		}
 
-		public void AddSubWidget()
+		public void AddSubWidget(IDialogueWidget subWidget)
 		{
-			if(ste.Widget != DialogueScriptWidget.nottext){
-				var subWidget = new DialogueTextWidget();
+			if(subWidget != null)
+			{
 				subWidget.SubWidgetDone += OnSubWidgetDone;
-				subWidget.Show();
-				vboxContainer.PackEnd(subWidget);
+				(subWidget as Gtk.Widget).Show();
+				vboxContainer.PackEnd(subWidget as Gtk.Widget);
 				customActionDone = false;
 			}
 		}
@@ -140,7 +140,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			widgetDone = true;
 			SetButtonNextParameters();
-			ScriptElementDone(this, new ScriptElementDoneEventArgs(ste.Name, next, result));
+			this.ScriptElementDone(this, new ScriptElementDoneEventArgs(ste.Name, next, result));
 		}
 
 		void OnSubElementRadioButtonActivated(object sender, EventArgs e)
@@ -166,11 +166,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 			if(customActionDone && widgetDone)
 			{
-				ScriptElementChanged(this, new ScriptElementDoneEventArgs(ste.Name, next, result)); // TODO Исправить NullPointerException, потом удалить изменение сенситивности саб-виджета.
+				this.ScriptElementChanged?.Invoke(this, new ScriptElementDoneEventArgs(ste.Name, next, result)); // TODO Исправить NullPointerException, потом удалить изменение сенситивности саб-виджета.
 			}
 
 			customActionDone = true;
-			(sender as DialogueTextWidget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
+		//	(sender as Gtk.Widget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
 			SetButtonNextParameters();
 		}
 
@@ -182,6 +182,22 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			buttonNext.Label = ste.NextElementsUnparced == null || ste.NextElementsUnparced == "" ? "Завершить" : "Далее";
 
 			buttonNext.Sensitive = nextElementSet && customActionDone && !widgetDone;
+		}
+
+		/// <summary>
+		/// Получить тип сабвиджета.
+		/// </summary>
+		/// <returns>Тип сабвиджета, если он определён, и null, если нет или nottext (TODO: исправить на default).</returns>
+		/// <param name="widgetType">Енам с типом виджета.</param>
+		IDialogueWidget GetSubWidgetType(DialogueScriptWidget widgetType)
+		{
+			switch (widgetType)
+			{
+				case DialogueScriptWidget.text:
+					return new DialogueTextWidget();
+				default:
+					return null;
+			}
 		}
 	}
 

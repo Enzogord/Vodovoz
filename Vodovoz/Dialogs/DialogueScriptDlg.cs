@@ -104,6 +104,7 @@ namespace Vodovoz.Dialogs
 		{
 			var element = new DialogueBaseWidget(ste);
 			element.ScriptElementDone += OnScriptElementDone;
+			element.ScriptElementChanged += OnScriptElementChanged;
 			element.Show();
 			vbox2.PackStart(element, false, true, 0);
 		}
