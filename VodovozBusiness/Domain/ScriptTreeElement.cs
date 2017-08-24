@@ -39,6 +39,14 @@ namespace Vodovoz.Domain
 			set { SetField(ref widget, value, () => Widget); }
 		}
 
+		string dependency;
+
+		public virtual string Dependency
+		{
+			get { return dependency; }
+			set { SetField(ref dependency, value, () => Dependency);}
+		}
+
 		public virtual List<string> ParseNextElements()
 		{
 			if(this.NextElementsUnparced == "")

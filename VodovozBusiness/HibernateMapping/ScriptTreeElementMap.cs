@@ -15,6 +15,7 @@ namespace Vodovoz.HibernateMapping
 			Map(x => x.Text).Column("text");
 			Map(x => x.NextElementsUnparced).Column("next_element");
 			Map(x => x.Widget).Column("widget");
+			Map(x => x.Dependency).Column("dependency"); 
 		}
 	}
 }
