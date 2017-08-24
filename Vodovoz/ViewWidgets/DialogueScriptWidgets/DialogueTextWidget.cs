@@ -1,4 +1,5 @@
 ﻿using System;
+using QSOrmProject;
 using Vodovoz.Domain;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
@@ -7,13 +8,15 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	public partial class DialogueTextWidget : Gtk.Bin, IDialogueWidget
 	{
 		string resultString;
+		IUnitOfWork UoW;
 
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;
 		public event EventHandler<TextCorrectionsPresentEventArgs> TextCorrectionsPresent;
 
-		public DialogueTextWidget()
+		public DialogueTextWidget(IUnitOfWork UoW)
 		{
 			this.Build();
+			this.UoW = UoW;
 		}
 
 		public void Configure()
@@ -39,6 +42,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 			resultString = entryText.Text;
 			SendResult();
+		}
+
+		public void RefreshDependency(ScriptTreeObject ste)
+		{
+			
 		}
 	}
 }

@@ -6,6 +6,7 @@ using Vodovoz.Domain;
 using System.Linq;
 using Gamma.Utilities;
 using NHibernate.Criterion;
+using Vodovoz.Dialogs;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
@@ -16,22 +17,25 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		List<RadioButtonId<ScriptTreeElement>> subElements = new List<RadioButtonId<ScriptTreeElement>>();
 		IUnitOfWork UoW;
 		ScriptTreeElement next;
-		ScriptTreeObject result = null;
+		ScriptTreeObject result = null, 
+							dependencyObject;
 		bool nextElementSet = true,         // Устанавливает, выбран ли следующий элемент. Становится false, если есть саб-элементы.
 				customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
 				widgetDone = false;			// Устанавливает, закончена ли работа с виджетом.
 
 		Gtk.Label labelText;
 		Gtk.Button buttonNext;
+		IDialogueWidget subWidget;
 
 		public event EventHandler<ScriptElementDoneEventArgs> ScriptElementDone;
 		public event EventHandler<ScriptElementDoneEventArgs> ScriptElementChanged;
 
-		public DialogueBaseWidget(ScriptTreeElement ste)
+		public DialogueBaseWidget(IUnitOfWork UoW, ScriptTreeElement ste, ScriptTreeObject dependencyObject)
 		{
 			this.Build();
-			UoW = UnitOfWorkFactory.CreateWithoutRoot();
+			this.UoW = UoW;
 			this.ste = ste;
+			this.dependencyObject = dependencyObject;
 			this.Configure();
 		}
 
@@ -52,7 +56,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			vboxContainer.PackEnd(hboxBottom, true, true, 0);
 
 			FillSubElements();
-			AddSubWidget(GetSubWidgetType(ste.Widget));
+
+			AddSubWidget();
+
 			SetButtonNextParameters();
 		}
 
@@ -111,8 +117,10 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			nextElementSet = false;
 		}
 
-		public void AddSubWidget(IDialogueWidget subWidget)
+		public void AddSubWidget()
 		{
+			subWidget = GetSubWidgetType(ste.Widget);
+
 			if(subWidget != null)
 			{
 				subWidget.SubWidgetDone += OnSubWidgetDone;
@@ -194,24 +202,30 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			switch (widgetType)
 			{
 				case DialogueScriptWidget.text:
-					return new DialogueTextWidget();
+					return new DialogueTextWidget(UoW);
 				case DialogueScriptWidget.counterparty:
-					return new DialogueCounterpartyWidget();
+					return new DialogueCounterpartyWidget(UoW);
 				case DialogueScriptWidget.deliverypoint:
-					return new DialogueDeliveryPointWidget();
+					return new DialogueDeliveryPointWidget(UoW, dependencyObject);
 				case DialogueScriptWidget.datetime:
-					return new DialogueDateTimeWidget();
+					return new DialogueDateTimeWidget(UoW);
 				case DialogueScriptWidget.dateschedule:
-					return new DialogueDateScheduleWidget();
+					return new DialogueDateScheduleWidget(UoW);
 				case DialogueScriptWidget.checkschedule:
-					return new DialogueCheckScheduleWidget();
+					return new DialogueCheckScheduleWidget(UoW);
 				case DialogueScriptWidget.orderrepeat:
-					return new DialogueOrderRepeatWidget();
+					return new DialogueOrderRepeatWidget(UoW);
 				case DialogueScriptWidget.checkemptybottles:
-					return new DialogueCheckEmptyBottlesWidget();
+					return new DialogueCheckEmptyBottlesWidget(UoW);
 				default:
 					return null;
 			}
+		}
+
+		public void RefreshDependency(ScriptTreeObject dependencyObject)
+		{
+			this.dependencyObject = dependencyObject;
+			subWidget.RefreshDependency(this.dependencyObject);
 		}
 	}
 

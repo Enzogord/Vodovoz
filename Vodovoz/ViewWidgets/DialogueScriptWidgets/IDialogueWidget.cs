@@ -7,6 +7,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	{
 		event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;
 		event EventHandler<TextCorrectionsPresentEventArgs> TextCorrectionsPresent;
+
+		void RefreshDependency(ScriptTreeObject ste);
 	}
 
 	public class SubWidgetDoneEventArgs : EventArgs

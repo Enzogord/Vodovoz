@@ -1,4 +1,5 @@
 ﻿using System;
+using QSOrmProject;
 using Vodovoz.Domain;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
@@ -7,14 +8,21 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	public partial class DialogueDateTimeWidget : Gtk.Bin, IDialogueWidget
 	{
 		DateTime resultDateTime;
+		IUnitOfWork UoW;
 
-		public DialogueDateTimeWidget()
+		public DialogueDateTimeWidget(IUnitOfWork UoW)
 		{
 			this.Build();
+			this.UoW = UoW;
 		}
 
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;
 		public event EventHandler<TextCorrectionsPresentEventArgs> TextCorrectionsPresent;
+
+		public void RefreshDependency(ScriptTreeObject ste)
+		{
+			
+		}
 
 		public void SendResult()
 		{

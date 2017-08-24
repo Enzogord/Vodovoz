@@ -8,10 +8,11 @@ using Vodovoz.ViewWidgets.DialogueScriptWidgets;
 namespace Vodovoz.Dialogs
 {
 	[System.ComponentModel.ToolboxItem(true)]
-	public partial class DialogueScriptDlg : Gtk.Bin, ITdiTab
+	public partial class DialogueScriptDlg : Gtk.Bin, ITdiTab, IOrmDialog
 	{
 		Dictionary<string, ScriptTreeElement> scriptTreeElements;
 		Dictionary<string, ScriptTreeObject> scriptTreeObjects = new Dictionary<string, ScriptTreeObject>();
+		Dictionary<ScriptTreeElement, DialogueBaseWidget> widgets = new Dictionary<ScriptTreeElement, DialogueBaseWidget>();
 		IUnitOfWork UoW;
 
 		public DialogueScriptDlg()
@@ -24,20 +25,11 @@ namespace Vodovoz.Dialogs
 
 		public void Configure()
 		{
-			DialogueBaseWidget firstElement;
-
-			if(scriptTreeElements.TryGetValue("START", out var element))
-			{
-				firstElement = new DialogueBaseWidget(element);
-			} else
-			{
+			if(scriptTreeElements.TryGetValue("START", out var element)) {
+				NextElement(element);
+			} else {
 				return;
 			}
-
-			firstElement.ScriptElementDone += OnScriptElementDone;
-			firstElement.ScriptElementChanged += OnScriptElementChanged;
-			firstElement.Show();
-			vbox2.PackStart(firstElement, false, true, 0);
 		}
 
 		#region ITdiTab_implementation
@@ -51,6 +43,10 @@ namespace Vodovoz.Dialogs
 		public ITdiTabParent TabParent { get ; set ; }
 
 		public bool FailInitialize { get { return false;  } }
+
+		IUnitOfWork IOrmDialog.UoW { get { return this.UoW; } }
+
+		public object EntityObject => throw new NotImplementedException();
 
 		public event EventHandler<TdiTabNameChangedEventArgs> TabNameChanged;
 		public event EventHandler<TdiTabCloseEventArgs> CloseTab;
@@ -96,17 +92,37 @@ namespace Vodovoz.Dialogs
 			if(e.Result != null) 
 			{
 				scriptTreeObjects[e.CurrentElement] = e.Result;
+
+				// Цикл проверяет, есть ли в зависимостях у уже созданных элементов обновлённый элемент, и рефрешит значение в них.
+				foreach(KeyValuePair<ScriptTreeElement, DialogueBaseWidget> widget in widgets)
+				{
+					if(widget.Key.Dependency == e.CurrentElement)
+					{
+						widget.Value.RefreshDependency(e.Result);
+					}
+				}
 			}
 		}
 	
 
 		public void NextElement(ScriptTreeElement ste)
 		{
-			var element = new DialogueBaseWidget(ste);
+			var element = new DialogueBaseWidget(UoW, ste, GetDependency(ste));
 			element.ScriptElementDone += OnScriptElementDone;
 			element.ScriptElementChanged += OnScriptElementChanged;
 			element.Show();
 			vbox2.PackStart(element, false, true, 0);
+			widgets[ste] = element;
+		}
+
+		ScriptTreeObject GetDependency(ScriptTreeElement ste)
+		{
+			if(ste.Dependency != null && scriptTreeObjects.ContainsKey(ste.Dependency))
+			{
+				return scriptTreeObjects[ste.Dependency];
+			}
+
+			return null;
 		}
 	}
 }

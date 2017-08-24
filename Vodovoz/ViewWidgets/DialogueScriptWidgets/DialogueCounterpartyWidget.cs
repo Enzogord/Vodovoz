@@ -1,4 +1,5 @@
 ﻿using System;
+using QSOrmProject;
 using Vodovoz.Domain;
 using Vodovoz.Domain.Client;
 
@@ -8,10 +9,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	public partial class DialogueCounterpartyWidget : Gtk.Bin, IDialogueWidget
 	{
 		Counterparty resultCounterparty;
+		IUnitOfWork UoW;
 		
-		public DialogueCounterpartyWidget()
+		public DialogueCounterpartyWidget(IUnitOfWork UoW)
 		{
 			this.Build();
+			this.UoW = UoW;
 			Configure();
 		}
 
@@ -41,6 +44,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 			resultCounterparty = referenceClient.GetSubject<Counterparty>();
 			SendResult();
+		}
+
+		public void RefreshDependency(ScriptTreeObject ste)
+		{
+			
 		}
 	}
 }
