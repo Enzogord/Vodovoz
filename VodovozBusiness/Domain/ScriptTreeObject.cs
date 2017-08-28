@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Vodovoz.Domain.Logistic;
 
 namespace Vodovoz.Domain
 {
@@ -20,5 +20,24 @@ namespace Vodovoz.Domain
 			get { return resultObjectType; }
 			set { resultObjectType = value; }
 		}
+	}
+
+	public class DateSchedule
+	{
+		DateTime date;
+
+		public DateTime Date {
+			get { return date; }
+			set { date = value; }
+		}
+
+		DeliverySchedule schedule;
+
+		public DeliverySchedule Schedule
+		{
+			get { return schedule; }
+			set { schedule = value; }
+		}
+
 	}
 }
