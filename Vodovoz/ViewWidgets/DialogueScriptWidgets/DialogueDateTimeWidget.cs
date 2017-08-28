@@ -32,5 +32,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			};
 			this.SubWidgetDone(this, new SubWidgetDoneEventArgs(result));
 		}
+
+		protected void OnPickerDateDateChanged(object sender, EventArgs e)
+		{
+			resultDateTime = pickerDate.Date;
+			SendResult();
+		}
 	}
 }

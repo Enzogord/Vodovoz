@@ -4,16 +4,37 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	public partial class DialogueDateTimeWidget
 	{
+		private global::Gtk.HBox hbox3;
+
+		private global::Gamma.Widgets.yDatePicker pickerDate;
+
 		protected virtual void Build()
 		{
 			global::Stetic.Gui.Initialize(this);
 			// Widget Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueDateTimeWidget
 			global::Stetic.BinContainer.Attach(this);
 			this.Name = "Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueDateTimeWidget";
+			// Container child Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueDateTimeWidget.Gtk.Container+ContainerChild
+			this.hbox3 = new global::Gtk.HBox();
+			this.hbox3.Name = "hbox3";
+			this.hbox3.Spacing = 6;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.pickerDate = new global::Gamma.Widgets.yDatePicker();
+			this.pickerDate.Events = ((global::Gdk.EventMask)(256));
+			this.pickerDate.Name = "pickerDate";
+			this.pickerDate.WithTime = false;
+			this.pickerDate.Date = new global::System.DateTime(0);
+			this.pickerDate.IsEditable = true;
+			this.pickerDate.AutoSeparation = true;
+			this.hbox3.Add(this.pickerDate);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox3[this.pickerDate]));
+			w1.Position = 0;
+			this.Add(this.hbox3);
 			if((this.Child != null)) {
 				this.Child.ShowAll();
 			}
 			this.Hide();
+			this.pickerDate.DateChanged += new global::System.EventHandler(this.OnPickerDateDateChanged);
 		}
 	}
 }
