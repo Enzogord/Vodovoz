@@ -1,10 +1,11 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gtk;
 using NHibernate.Criterion;
 using QSOrmProject;
 using Vodovoz.Domain.Client;
+using Vodovoz.Domain.Goods;
 using Vodovoz.Domain.Logistic;
 using Vodovoz.Domain.Orders;
 using VodovozOrder = Vodovoz.Domain.Orders.Order;
@@ -92,6 +93,34 @@ namespace Vodovoz.Repository
 			return uow.Session.QueryOver<VodovozOrder> ()
 				.Where(c => c.Code1c.IsIn(codes1c))
 				.List<VodovozOrder> ();
+		}
+
+		/// <summary>
+		/// Получить самый последний заказ с водой в номенклатуре.
+		/// </summary>
+		/// <returns>Самый последний заказ с водой в номенклатуре, если такого нет - null.</returns>
+		/// <param name="UoW">IUnitOfWork.</param>
+		/// <param name="deliveryPoint">Точка доставки.</param>
+		public static VodovozOrder GetLatestWaterOrderForDeliveryPoint(IUnitOfWork UoW, DeliveryPoint deliveryPoint)
+		{
+			VodovozOrder orderAlias = null;
+			var queryResult = UoW.Session.QueryOver<VodovozOrder>(() => orderAlias)
+								 .Where(() => orderAlias.DeliveryPoint.Id == deliveryPoint.Id)
+			                     .OrderBy(() => orderAlias.Id).Desc
+								 .List();
+			
+			foreach(VodovozOrder order in queryResult)
+			{
+				foreach(OrderItem item in order.OrderItems)
+				{
+					if(item.Nomenclature.Category == NomenclatureCategory.water)
+					{
+						return order;
+					}
+				}
+			}
+
+			return null;
 		}
 	}
 }

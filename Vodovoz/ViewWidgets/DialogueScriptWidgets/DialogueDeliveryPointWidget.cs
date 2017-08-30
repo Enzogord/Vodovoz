@@ -40,7 +40,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				ResultObjectType = resultDeliveryPoint.GetType(),
 				ResultObject = resultDeliveryPoint as object
 			};
-			this.SubWidgetDone(this, new SubWidgetDoneEventArgs(result));
+			this.SubWidgetDone?.Invoke(this, new SubWidgetDoneEventArgs(result));
 		}
 
 		protected void OnReferenceDeliveryPointChanged(object sender, EventArgs e)

@@ -214,7 +214,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				case DialogueScriptWidget.checkschedule:
 					return new DialogueCheckScheduleWidget(UoW);
 				case DialogueScriptWidget.orderrepeat:
-					return new DialogueOrderRepeatWidget(UoW);
+					return new DialogueOrderRepeatWidget(UoW, dependencyObject);
 				case DialogueScriptWidget.checkemptybottles:
 					return new DialogueCheckEmptyBottlesWidget(UoW);
 				default:
