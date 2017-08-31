@@ -23,9 +23,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 	public class TextCorrectionsPresentEventArgs : EventArgs
 	{
-		public string Corrections { get; private set; }
+		public string[] Corrections { get; private set; }
 
-		public TextCorrectionsPresentEventArgs(string corrections)
+		public TextCorrectionsPresentEventArgs(string[] corrections)
 		{
 			Corrections = corrections;
 		}

@@ -17,14 +17,13 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	public partial class DialogueOrderRepeatWidget : Gtk.Bin, IDialogueWidget
 	{
 		IUnitOfWork UoW;
-		DeliveryPoint dependencyCounterparty;
+		DeliveryPoint dependencyDeliveryPoint = new DeliveryPoint();
 		List<OrderItemWithSelect> resultOrderItems;
 
-		public DialogueOrderRepeatWidget(IUnitOfWork UoW, ScriptTreeObject dependencyObject)
+		public DialogueOrderRepeatWidget(IUnitOfWork UoW)
 		{
 			this.Build();
 			this.UoW = UoW;
-			dependencyCounterparty = GetDependency(dependencyObject);
 			Configure();
 		}
 
@@ -47,9 +46,6 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				.AddColumn("Скидка %").AddNumericRenderer(node => node.Item.Discount)
 				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
 				.Finish();
-		//	treeItems.
-
-			ShowOrderItems(GetLastWaterOrder());
 		}
 
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;
@@ -68,7 +64,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void RefreshDependency(ScriptTreeObject ste)
 		{
-			GetDependency(ste);
+			dependencyDeliveryPoint =  GetDependency(ste);
 			ShowOrderItems(GetLastWaterOrder());
 		}
 
@@ -98,7 +94,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		Order GetLastWaterOrder()
 		{
-			var order = OrderRepository.GetLatestWaterOrderForDeliveryPoint(UoW, dependencyCounterparty);
+			var order = OrderRepository.GetLatestWaterOrderForDeliveryPoint(UoW, dependencyDeliveryPoint);
 			return order;
 		}
 

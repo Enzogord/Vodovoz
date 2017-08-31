@@ -9,20 +9,19 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	public partial class DialogueDeliveryPointWidget : Gtk.Bin, IDialogueWidget
 	{
 		DeliveryPoint resultDeliveryPoint;
-		Counterparty dependencyCounterparty;
+		Counterparty dependencyCounterparty = new Counterparty();
 		IUnitOfWork UoW;
 
-		public DialogueDeliveryPointWidget(IUnitOfWork UoW, ScriptTreeObject dependencyObject)
+		public DialogueDeliveryPointWidget(IUnitOfWork UoW)
 		{
 			this.Build();
 			this.UoW = UoW;
-			dependencyCounterparty = GetDependency(dependencyObject);
 			Configure();
 		}
 
 		public void Configure()
 		{
-			referenceDeliveryPoint.RepresentationModel = new ViewModel.ClientDeliveryPointsVM(UoW, dependencyCounterparty);
+			
 		}
 
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;

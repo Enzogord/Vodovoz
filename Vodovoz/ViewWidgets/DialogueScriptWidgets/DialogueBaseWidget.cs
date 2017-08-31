@@ -124,9 +124,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			if(subWidget != null)
 			{
 				subWidget.SubWidgetDone += OnSubWidgetDone;
+				subWidget.TextCorrectionsPresent += OnTextCorrectionsPresent;
 				(subWidget as Gtk.Widget).Show();
 				vboxContainer.PackEnd(subWidget as Gtk.Widget);
 				customActionDone = false;
+				subWidget.RefreshDependency(dependencyObject);
 			}
 		}
 
@@ -182,6 +184,14 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			SetButtonNextParameters();
 		}
 
+		void OnTextCorrectionsPresent(object sender, TextCorrectionsPresentEventArgs e)
+		{
+			for(int i = 0; i < e.Corrections.Length; i++)
+			{
+				labelText.Text = labelText.Text.Replace("#" + i.ToString() + "#", e.Corrections[i]);
+			}
+		}
+
 		/// <summary>
 		/// Устанавливает параметры кнопки "Далее" (возможность нажать и надпись).
 		/// </summary>
@@ -206,7 +216,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				case DialogueScriptWidget.counterparty:
 					return new DialogueCounterpartyWidget(UoW);
 				case DialogueScriptWidget.deliverypoint:
-					return new DialogueDeliveryPointWidget(UoW, dependencyObject);
+					return new DialogueDeliveryPointWidget(UoW);
 				case DialogueScriptWidget.datetime:
 					return new DialogueDateTimeWidget(UoW);
 				case DialogueScriptWidget.dateschedule:
@@ -214,7 +224,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				case DialogueScriptWidget.checkschedule:
 					return new DialogueCheckScheduleWidget(UoW);
 				case DialogueScriptWidget.orderrepeat:
-					return new DialogueOrderRepeatWidget(UoW, dependencyObject);
+					return new DialogueOrderRepeatWidget(UoW);
 				case DialogueScriptWidget.checkemptybottles:
 					return new DialogueCheckEmptyBottlesWidget(UoW);
 				default:
