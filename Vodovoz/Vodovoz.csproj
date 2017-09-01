@@ -699,6 +699,8 @@
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueOrderRepeatWidget.cs" />
     <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueCheckEmptyBottlesWidget.cs" />
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCheckEmptyBottlesWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueConstructorWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueConstructorWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -209,6 +209,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		/// <param name="widgetType">Енам с типом виджета.</param>
 		IDialogueWidget GetSubWidgetType(DialogueScriptWidget widgetType)
 		{
+			if(ste.NextElementsUnparced == null || ste.NextElementsUnparced == "")
+			{
+				return new DialogueConstructorWidget(UoW);
+			}
+
 			switch (widgetType)
 			{
 				case DialogueScriptWidget.text:

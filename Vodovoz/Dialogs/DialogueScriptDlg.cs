@@ -14,6 +14,7 @@ namespace Vodovoz.Dialogs
 		Dictionary<string, ScriptTreeObject> scriptTreeObjects = new Dictionary<string, ScriptTreeObject>();
 		Dictionary<ScriptTreeElement, DialogueBaseWidget> widgets = new Dictionary<ScriptTreeElement, DialogueBaseWidget>();
 		IUnitOfWork UoW;
+		List<string> constructors = new List<string>();
 
 		public DialogueScriptDlg()
 		{
@@ -81,6 +82,7 @@ namespace Vodovoz.Dialogs
 
 			if(e.NextElement == null)
 			{
+				ShowDlg(e.Result.ResultObject as ITdiDialog);
 				return;
 			}
 
@@ -122,7 +124,20 @@ namespace Vodovoz.Dialogs
 				return scriptTreeObjects[ste.Dependency];
 			}
 
+			if(ste.NextElementsUnparced == null || ste.NextElementsUnparced == "")
+			{
+				return new ScriptTreeObject {
+					ResultObjectType = scriptTreeObjects.GetType(),
+					ResultObject = scriptTreeObjects as object
+				};
+			}
+
 			return null;
+		}
+
+		void ShowDlg(ITdiDialog dlg)
+		{
+			TabParent.AddTab(dlg, this, false);
 		}
 	}
 }

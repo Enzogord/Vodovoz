@@ -84,8 +84,11 @@ namespace Vodovoz
 			ConfigureDlg ();
 		}
 
-		public OrderDlg (Order sub) : this (sub.Id)
+		public OrderDlg (Order sub) // : this (sub.Id)
 		{
+			this.Build();
+			UoWGeneric = UnitOfWorkFactory.CreateWithNewRoot<Order>(sub);
+			ConfigureDlg();
 		}
 
 		public void ConfigureDlg ()
