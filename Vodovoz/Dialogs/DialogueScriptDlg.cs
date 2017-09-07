@@ -80,7 +80,7 @@ namespace Vodovoz.Dialogs
 				scriptTreeObjects[e.CurrentElement] = e.Result;
 			}
 
-			if(e.NextElement == null)
+			if(scriptTreeElements[e.CurrentElement].Widget == DialogueScriptWidget.constructor)
 			{
 				ShowDlg(e.Result.ResultObject as ITdiDialog);
 				return;
@@ -93,6 +93,7 @@ namespace Vodovoz.Dialogs
 		{
 			if(e.Result != null) 
 			{
+				bool hasDependencies = false;
 				scriptTreeObjects[e.CurrentElement] = e.Result;
 
 				// Цикл проверяет, есть ли в зависимостях у уже созданных элементов обновлённый элемент, и рефрешит значение в них.
@@ -101,6 +102,15 @@ namespace Vodovoz.Dialogs
 					if(widget.Key.Dependency == e.CurrentElement)
 					{
 						widget.Value.RefreshDependency(e.Result);
+						hasDependencies = true;
+					}
+				}
+
+				if(constructors.Count > 0 && !hasDependencies)
+				{
+					foreach(string constructor in constructors)
+					{
+						widgets[scriptTreeElements[constructor]].RefreshDependency(GetDependency(scriptTreeElements[constructor]));
 					}
 				}
 			}
@@ -115,6 +125,11 @@ namespace Vodovoz.Dialogs
 			element.Show();
 			vbox2.PackStart(element, false, true, 0);
 			widgets[ste] = element;
+
+			if(ste.Widget == DialogueScriptWidget.constructor)
+			{
+				constructors.Add(ste.Name);
+			}
 		}
 
 		ScriptTreeObject GetDependency(ScriptTreeElement ste)
@@ -124,7 +139,7 @@ namespace Vodovoz.Dialogs
 				return scriptTreeObjects[ste.Dependency];
 			}
 
-			if(ste.NextElementsUnparced == null || ste.NextElementsUnparced == "")
+			if(ste.Widget == DialogueScriptWidget.constructor)
 			{
 				return new ScriptTreeObject {
 					ResultObjectType = scriptTreeObjects.GetType(),

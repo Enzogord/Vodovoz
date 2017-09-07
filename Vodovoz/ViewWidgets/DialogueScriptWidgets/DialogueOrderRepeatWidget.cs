@@ -64,7 +64,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void RefreshDependency(ScriptTreeObject ste)
 		{
-			dependencyDeliveryPoint =  GetDependency(ste);
+			dependencyDeliveryPoint = GetDependency(ste);
 			ShowOrderItems(GetLastWaterOrder());
 		}
 

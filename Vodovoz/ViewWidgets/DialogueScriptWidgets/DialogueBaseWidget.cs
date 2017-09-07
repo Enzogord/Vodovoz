@@ -209,11 +209,6 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		/// <param name="widgetType">Енам с типом виджета.</param>
 		IDialogueWidget GetSubWidgetType(DialogueScriptWidget widgetType)
 		{
-			if(ste.NextElementsUnparced == null || ste.NextElementsUnparced == "")
-			{
-				return new DialogueConstructorWidget(UoW);
-			}
-
 			switch (widgetType)
 			{
 				case DialogueScriptWidget.text:
@@ -232,6 +227,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 					return new DialogueOrderRepeatWidget(UoW);
 				case DialogueScriptWidget.checkemptybottles:
 					return new DialogueCheckEmptyBottlesWidget(UoW);
+				case DialogueScriptWidget.constructor:
+					return new DialogueConstructorWidget(UoW);
 				default:
 					return null;
 			}

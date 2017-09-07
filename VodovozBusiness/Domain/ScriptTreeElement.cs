@@ -73,6 +73,7 @@ namespace Vodovoz.Domain
 		dateschedule,
 		checkschedule,
 		orderrepeat,
-		checkemptybottles
+		checkemptybottles,
+		constructor
 	}
 }
