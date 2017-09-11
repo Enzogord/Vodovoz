@@ -678,6 +678,8 @@
     <Compile Include="Dialogs\Logistic\DeliveryDayScheduleDlg.cs" />
     <Compile Include="gtk-gui\Vodovoz.Dialogs.Logistic.DeliveryDayScheduleDlg.cs" />
     <Compile Include="Additions\Logistic\RouteOptimization\PossibleTrip.cs" />
+    <Compile Include="Dialogs\Logistic\ScheduleRestrictedDistrictsDlg.cs" />
+    <Compile Include="gtk-gui\Vodovoz.Dialogs.Logistic.ScheduleRestrictedDistrictsDlg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
