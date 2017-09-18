@@ -409,6 +409,10 @@
     <Compile Include="Domain\ScriptTreeElement.cs" />
     <Compile Include="HibernateMapping\ScriptTreeElementMap.cs" />
     <Compile Include="Domain\ScriptTreeObject.cs" />
+    <Compile Include="Domain\Logistic\ScheduleRestrictedDistrict.cs" />
+    <Compile Include="Domain\Logistic\ScheduleRestriction.cs" />
+    <Compile Include="HibernateMapping\Logistic\ScheduleRestrictedDistrictMap.cs" />
+    <Compile Include="HibernateMapping\Logistic\ScheduleRestrictionMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
