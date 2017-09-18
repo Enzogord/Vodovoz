@@ -4,16 +4,37 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	public partial class DialogueConstructorWidget
 	{
+		private global::Gtk.HBox hbox1;
+
+		private global::Gtk.Button buttonGenerateDlg;
+
 		protected virtual void Build()
 		{
 			global::Stetic.Gui.Initialize(this);
 			// Widget Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueConstructorWidget
 			global::Stetic.BinContainer.Attach(this);
 			this.Name = "Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueConstructorWidget";
+			// Container child Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueConstructorWidget.Gtk.Container+ContainerChild
+			this.hbox1 = new global::Gtk.HBox();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.buttonGenerateDlg = new global::Gtk.Button();
+			this.buttonGenerateDlg.CanFocus = true;
+			this.buttonGenerateDlg.Name = "buttonGenerateDlg";
+			this.buttonGenerateDlg.UseUnderline = true;
+			this.buttonGenerateDlg.Label = global::Mono.Unix.Catalog.GetString("Открыть диалог");
+			this.hbox1.Add(this.buttonGenerateDlg);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.buttonGenerateDlg]));
+			w1.Position = 0;
+			w1.Expand = false;
+			w1.Fill = false;
+			this.Add(this.hbox1);
 			if((this.Child != null)) {
 				this.Child.ShowAll();
 			}
 			this.Hide();
+			this.buttonGenerateDlg.Clicked += new global::System.EventHandler(this.OnButtonGenerateDlgClicked);
 		}
 	}
 }

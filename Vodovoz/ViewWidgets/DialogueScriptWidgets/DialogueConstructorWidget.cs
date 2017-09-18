@@ -9,11 +9,12 @@ using Vodovoz.Domain.Orders;
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	[System.ComponentModel.ToolboxItem(true)]
-	public partial class DialogueConstructorWidget : Gtk.Bin, IDialogueWidget
+	public partial class DialogueConstructorWidget : WidgetOnTdiTabBase, IDialogueWidget
 	{
 		Dictionary<string, ScriptTreeObject> dialogueResults = new Dictionary<string, ScriptTreeObject>();
 		IUnitOfWork UoW;
 		ITdiDialog dialogue;
+		object resultEntity;
 
 		public DialogueConstructorWidget(IUnitOfWork UoW)
 		{
@@ -26,19 +27,18 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void RefreshDependency(ScriptTreeObject ste)
 		{
-			dialogue = CreateDlg(GetDialogueResults(ste));
-			SendResults();
+			dialogueResults = GetDialogueResults(ste);
 		}
 
 		public void SendResults() // ???
 		{
-			if(dialogue == null) {
+			if(resultEntity == null) {
 				return;
 			}
 
 			var result = new ScriptTreeObject {
-				ResultObjectType = dialogue.GetType(),
-				ResultObject = dialogue as object
+				ResultObjectType = resultEntity.GetType(),
+				ResultObject = resultEntity as object
 			};
 			this.SubWidgetDone?.Invoke(this, new SubWidgetDoneEventArgs(result));
 		}
@@ -54,17 +54,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			return null;
 		}
 
-		ITdiDialog CreateDlg(Dictionary<string, ScriptTreeObject> results)
+		ITdiDialog CreateDlg()
 		{
-			var order = new Order {
-				Client = GetCounterparty(results),
-				DeliveryPoint = GetDeliveryPoint(results),
-				DeliveryDate = GetDateSchedule(results).Date,
-				DeliverySchedule = GetDateSchedule(results).Schedule,
-				OrderItems = GetOrderItems(results)
-			};
+			resultEntity = CreateOrder();
 
-			var dlg = OrmMain.CreateObjectDialog(order);
+			var dlg = OrmMain.CreateObjectDialog(resultEntity);
 
 			return dlg;
 		}
@@ -104,15 +98,78 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			return null;
 		}
 
-		List<OrderItem> GetOrderItems(Dictionary<string, ScriptTreeObject> results)
+		List<OrderItem> GetOrderItems(Dictionary<string, ScriptTreeObject> results, Order order)
 		{
 			foreach(KeyValuePair<string, ScriptTreeObject> pair in results) {
 				if(pair.Value.ResultObject is List<OrderItem>) {
-					return pair.Value.ResultObject as List<OrderItem>;
+					var items = new List<OrderItem>();
+
+					foreach(OrderItem item in pair.Value.ResultObject as List<OrderItem>)
+					{
+						items.Add(new OrderItem(){
+							Order = order,
+							AdditionalAgreement = item.AdditionalAgreement,
+							Count = item.Count,
+							Equipment = item.Equipment,
+							Nomenclature = item.Nomenclature,
+							Price = item.Price
+						});
+					}
+
+					return items;
 				}
 			}
 
 			return null;
+		}
+
+		protected void OnButtonGenerateDlgClicked(object sender, EventArgs e)
+		{
+			dialogue = CreateDlg();
+			dialogue.EntitySaved += OnDialogueEntitySaved;
+			dialogue.CloseTab += OnDialogueTabClosed;
+			OpenNewTab(dialogue);
+		}
+
+		void OnDialogueEntitySaved(object sender, EntitySavedEventArgs e)
+		{
+			if(e.Entity != null)
+			{
+				resultEntity = e.Entity;
+			}
+			SendResults();
+		}
+
+		void OnDialogueTabClosed(object sender, EventArgs e)
+		{
+		//	DeleteEntity(resultEntity);
+		}
+
+		object CreateOrder()
+		{
+			var order = new Order();
+
+			order.Client = GetCounterparty(dialogueResults);
+			order.DeliveryPoint = GetDeliveryPoint(dialogueResults);
+			order.DeliveryDate = GetDateSchedule(dialogueResults).Date;
+			order.DeliverySchedule = GetDateSchedule(dialogueResults).Schedule;
+			order.OrderItems = GetOrderItems(dialogueResults, order);
+
+			return order;
+		}
+
+		object SaveEntity(object entity)
+		{
+			UoW.TrySave(entity);
+			UoW.Commit();
+
+			return entity;
+		}
+
+		void DeleteEntity(object entity)
+		{
+			UoW.TryDelete(entity);
+			UoW.Commit();
 		}
 	}
 }

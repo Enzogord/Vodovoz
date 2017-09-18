@@ -7,11 +7,12 @@ using System.Linq;
 using Gamma.Utilities;
 using NHibernate.Criterion;
 using Vodovoz.Dialogs;
+using QSTDI;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	[System.ComponentModel.ToolboxItem(true)]
-	public partial class DialogueBaseWidget : Gtk.Bin
+	public partial class DialogueBaseWidget : WidgetOnTdiTabBase
 	{
 		ScriptTreeElement ste;
 		List<RadioButtonId<ScriptTreeElement>> subElements = new List<RadioButtonId<ScriptTreeElement>>();
