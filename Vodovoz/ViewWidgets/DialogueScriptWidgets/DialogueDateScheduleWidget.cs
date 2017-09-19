@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using GeoAPI.Geometries;
+using GMap.NET;
+using GMap.NET.GtkSharp;
+using NetTopologySuite.Geometries;
 using QSOrmProject;
 using Vodovoz.Domain;
+using Vodovoz.Domain.Client;
 using Vodovoz.Domain.Logistic;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
@@ -10,6 +16,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	{
 		IUnitOfWork UoW;
 		DateSchedule resultDateSchedule = new DateSchedule();
+		DeliveryPoint dependencyDeliveryPoint;
+		IList<ScheduleRestrictedDistrict> allRestrictions;
+		ScheduleRestrictedDistrict district;
 		Boolean dateSet = false, scheduleSet = false;
 
 		public DialogueDateScheduleWidget(IUnitOfWork UoW)
@@ -21,6 +30,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void Configure()
 		{
+			
 			referenceSchedule.SubjectType = typeof(DeliverySchedule);
 		}
 
@@ -61,6 +71,34 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			resultDateSchedule.Date = pickerDate.Date;
 			dateSet = true;
 			SendResults();
+		}
+
+		IList<ScheduleRestrictedDistrict> GetRestrictions()
+		{
+			var restrictionsQuery = UoW.Session.QueryOver<ScheduleRestrictedDistrict>().List();
+
+			return restrictionsQuery;
+		}
+
+		void CheckScheduleRestrictions()
+		{
+			var coord = new Coordinate() {
+				X = dependencyDeliveryPoint.GmapPoint.Lat,
+				Y = dependencyDeliveryPoint.GmapPoint.Lng
+			};
+			var deliveryPointCoord = new Point(coord);
+
+			if(allRestrictions != null)
+			{
+				foreach(ScheduleRestrictedDistrict restriction in allRestrictions)
+				{
+					if(restriction.DistrictBorder.Contains(deliveryPointCoord))
+					{
+						district = restriction;
+						return;
+					}
+				}
+			}
 		}
 	}
 }
