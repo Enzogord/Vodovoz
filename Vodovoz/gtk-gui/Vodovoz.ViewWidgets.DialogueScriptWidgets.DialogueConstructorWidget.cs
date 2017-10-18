@@ -23,14 +23,15 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.buttonGenerateDlg.CanFocus = true;
 			this.buttonGenerateDlg.Name = "buttonGenerateDlg";
 			this.buttonGenerateDlg.UseUnderline = true;
-			this.buttonGenerateDlg.Label = global::Mono.Unix.Catalog.GetString("Открыть диалог");
+			this.buttonGenerateDlg.Label = global::Mono.Unix.Catalog.GetString("Открыть заказ");
 			this.hbox1.Add(this.buttonGenerateDlg);
 			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.buttonGenerateDlg]));
 			w1.Position = 0;
 			w1.Expand = false;
 			w1.Fill = false;
 			this.Add(this.hbox1);
-			if((this.Child != null)) {
+			if ((this.Child != null))
+			{
 				this.Child.ShowAll();
 			}
 			this.Hide();

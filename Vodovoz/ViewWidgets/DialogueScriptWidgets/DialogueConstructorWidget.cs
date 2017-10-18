@@ -1,13 +1,18 @@
 ﻿﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using QSOrmProject;
 using QSTDI;
 using Vodovoz.Domain;
 using Vodovoz.Domain.Client;
+using Vodovoz.Domain.Goods;
 using Vodovoz.Domain.Orders;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
+	/// <summary>
+	/// Конструктор заказа
+	/// </summary>
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class DialogueConstructorWidget : WidgetOnTdiTabBase, IDialogueWidget
 	{
@@ -100,10 +105,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		List<OrderItem> GetOrderItems(Dictionary<string, ScriptTreeObject> results, Order order)
 		{
+			var items = new List<OrderItem>();
 			foreach(KeyValuePair<string, ScriptTreeObject> pair in results) {
 				if(pair.Value.ResultObject is List<OrderItem>) {
-					var items = new List<OrderItem>();
-
 					foreach(OrderItem item in pair.Value.ResultObject as List<OrderItem>)
 					{
 						items.Add(new OrderItem(){
@@ -112,15 +116,27 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 							Count = item.Count,
 							Equipment = item.Equipment,
 							Nomenclature = item.Nomenclature,
-							Price = item.Price
+							Price = item.Price,
 						});
 					}
-
-					return items;
 				}
 			}
+			return items;
+			//return null;
+		}
 
-			return null;
+		private int GetReturnBottles(Dictionary<string, ScriptTreeObject> results)
+		{
+			var items = new List<OrderItem>();
+			int returnBottles = 0;
+			foreach(KeyValuePair<string, ScriptTreeObject> pair in results) {
+				if(pair.Value.ResultObject is List<OrderItem>) {
+					foreach(OrderItem item in (pair.Value.ResultObject as List<OrderItem>).Where(o => o.Nomenclature.Category == NomenclatureCategory.water)) {
+						returnBottles += item.Count;
+					}
+				}
+			}
+			return returnBottles;
 		}
 
 		protected void OnButtonGenerateDlgClicked(object sender, EventArgs e)
@@ -154,6 +170,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			order.DeliveryDate = GetDateSchedule(dialogueResults).Date;
 			order.DeliverySchedule = GetDateSchedule(dialogueResults).Schedule;
 			order.OrderItems = GetOrderItems(dialogueResults, order);
+			order.BottlesReturn = GetReturnBottles(dialogueResults);
+				
 
 			return order;
 		}

@@ -4,16 +4,112 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	public partial class DialogueCheckEmptyBottlesWidget
 	{
+		private global::Gtk.VBox vbox2;
+
+		private global::Gtk.HBox hbox1;
+
+		private global::Gtk.Label labelReturnTara;
+
+		private global::Gamma.GtkWidgets.ySpinButton spinBottlesReturn;
+
+		private global::Gtk.HBox hbox3;
+
+		private global::Gtk.Label labelTaraDebtText;
+
+		private global::Gtk.Label taraDebt;
+
+		private global::Gtk.HButtonBox hbuttonbox2;
+
+		private global::Gtk.Table table1;
+
 		protected virtual void Build()
 		{
 			global::Stetic.Gui.Initialize(this);
 			// Widget Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCheckEmptyBottlesWidget
 			global::Stetic.BinContainer.Attach(this);
 			this.Name = "Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCheckEmptyBottlesWidget";
-			if((this.Child != null)) {
+			// Container child Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueCheckEmptyBottlesWidget.Gtk.Container+ContainerChild
+			this.vbox2 = new global::Gtk.VBox();
+			this.vbox2.Name = "vbox2";
+			this.vbox2.Spacing = 6;
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.hbox1 = new global::Gtk.HBox();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.labelReturnTara = new global::Gtk.Label();
+			this.labelReturnTara.Name = "labelReturnTara";
+			this.labelReturnTara.LabelProp = global::Mono.Unix.Catalog.GetString("Возвращает тары");
+			this.hbox1.Add(this.labelReturnTara);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.labelReturnTara]));
+			w1.Position = 0;
+			w1.Expand = false;
+			w1.Fill = false;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.spinBottlesReturn = new global::Gamma.GtkWidgets.ySpinButton(0D, 10000D, 1D);
+			this.spinBottlesReturn.CanFocus = true;
+			this.spinBottlesReturn.Name = "spinBottlesReturn";
+			this.spinBottlesReturn.Adjustment.PageIncrement = 10D;
+			this.spinBottlesReturn.ClimbRate = 1D;
+			this.spinBottlesReturn.Numeric = true;
+			this.spinBottlesReturn.ValueAsDecimal = 0m;
+			this.spinBottlesReturn.ValueAsInt = 1;
+			this.hbox1.Add(this.spinBottlesReturn);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.spinBottlesReturn]));
+			w2.Position = 1;
+			w2.Expand = false;
+			w2.Fill = false;
+			this.vbox2.Add(this.hbox1);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox1]));
+			w3.Position = 0;
+			w3.Expand = false;
+			w3.Fill = false;
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.hbox3 = new global::Gtk.HBox();
+			this.hbox3.Name = "hbox3";
+			this.hbox3.Spacing = 6;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.labelTaraDebtText = new global::Gtk.Label();
+			this.labelTaraDebtText.Name = "labelTaraDebtText";
+			this.labelTaraDebtText.LabelProp = global::Mono.Unix.Catalog.GetString("Долг по таре:");
+			this.hbox3.Add(this.labelTaraDebtText);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox3[this.labelTaraDebtText]));
+			w4.Position = 0;
+			w4.Expand = false;
+			w4.Fill = false;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.taraDebt = new global::Gtk.Label();
+			this.taraDebt.Name = "taraDebt";
+			this.hbox3.Add(this.taraDebt);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox3[this.taraDebt]));
+			w5.Position = 1;
+			w5.Expand = false;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.hbuttonbox2 = new global::Gtk.HButtonBox();
+			this.hbuttonbox2.Name = "hbuttonbox2";
+			this.hbox3.Add(this.hbuttonbox2);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox3[this.hbuttonbox2]));
+			w6.Position = 2;
+			this.vbox2.Add(this.hbox3);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hbox3]));
+			w7.Position = 1;
+			w7.Expand = false;
+			w7.Fill = false;
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.table1 = new global::Gtk.Table(((uint)(3)), ((uint)(3)), false);
+			this.table1.Name = "table1";
+			this.table1.RowSpacing = ((uint)(6));
+			this.table1.ColumnSpacing = ((uint)(6));
+			this.vbox2.Add(this.table1);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.table1]));
+			w8.Position = 2;
+			this.Add(this.vbox2);
+			if ((this.Child != null))
+			{
 				this.Child.ShowAll();
 			}
 			this.Hide();
+			this.spinBottlesReturn.ValueChanged += new global::System.EventHandler(this.OnSpinBottlesReturnValueChanged);
 		}
 	}
 }

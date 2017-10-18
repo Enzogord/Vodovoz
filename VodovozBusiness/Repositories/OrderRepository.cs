@@ -122,6 +122,31 @@ namespace Vodovoz.Repository
 
 			return null;
 		}
+
+		/// <summary>
+		/// Получить долг по бутылкам.
+		/// </summary>
+		/// <returns>Количество бутылок.</returns>
+		/// <param name="UoW">IUnitOfWork.</param>
+		/// <param name="deliveryPoint">Точка доставки.</param>
+		public static int GetDebtBottlesForDeliveryPoint(IUnitOfWork UoW, DeliveryPoint deliveryPoint)
+		{
+			//VodovozOrder orderAlias = null;
+			//var queryResult = UoW.Session.QueryOver<VodovozOrder>(() => orderAlias)
+			//					 .Where(() => orderAlias.DeliveryPoint.Id == deliveryPoint.Id)
+			//					 .OrderBy(() => orderAlias.Id).Desc
+			//					 .List();
+
+			//foreach(VodovozOrder order in queryResult) {
+			//	foreach(OrderItem item in order.OrderItems) {
+			//		if(item.Nomenclature.Category == NomenclatureCategory.water) {
+			//			return order;
+			//		}
+			//	}
+			//}
+
+			return 0;
+		}
 	}
 }
 

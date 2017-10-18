@@ -706,6 +706,24 @@
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueConstructorWidget.cs" />
     <Compile Include="Dialogs\Logistic\ScheduleRestrictedDistrictsDlg.cs" />
     <Compile Include="gtk-gui\Vodovoz.Dialogs.Logistic.ScheduleRestrictedDistrictsDlg.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueNewOrderWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueNewOrderWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueleaveAndPrintWidgets.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueleaveAndPrintWidgets.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueEquipmentWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueEquipmentWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueAdditionalWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueAdditionalWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueFreeRentWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueFreeRentWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialoguePaidRentWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialoguePaidRentWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueChangeAndStampWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueChangeAndStampWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueSanitizationWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueSanitizationWidget.cs" />
+    <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueWelcomeWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueWelcomeWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -1084,10 +1102,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild">
-            <inheritsSet />
-            <inheritsScope />
-          </DotNetNamingPolicy>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild" />
         </Policies>
         <Deployment.LinuxDeployData generateScript="False" />
       </Properties>

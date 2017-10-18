@@ -462,9 +462,10 @@ public partial class MainWindow : Window
 			() => new ReferenceRepresentation(new TransferOperationsVM()).CustomTabName("Переносы между точками доставки").Buttons(ReferenceButtonMode.CanAll)		);
 	}
 
-	void ActionDialogueScriptDlg_Activated (object sender, System.EventArgs e)
+	void ActionDialogueScriptDlg_Activated(object sender, System.EventArgs e)
 	{
 		tdiMain.AddTab(new DialogueScriptDlg());
+	}
 
 	void ActionScheduleRestrictedDistricts_Activated (object sender, System.EventArgs e)
 	{

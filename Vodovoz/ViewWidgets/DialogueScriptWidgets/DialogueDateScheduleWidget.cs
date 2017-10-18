@@ -32,6 +32,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			
 			referenceSchedule.SubjectType = typeof(DeliverySchedule);
+
+			pickerDate.Date = DateTime.Now.AddDays(1);
 		}
 
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;

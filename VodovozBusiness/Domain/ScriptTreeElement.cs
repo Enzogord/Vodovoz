@@ -18,6 +18,13 @@ namespace Vodovoz.Domain
 			set { SetField(ref name, value, () => Name); }
 		}
 
+		string label;
+
+		public virtual string Label {
+			get { return label; }
+			set { SetField(ref label, value, () => Label); }
+		}
+
 		string text;
 
 		public virtual string Text {
@@ -47,6 +54,14 @@ namespace Vodovoz.Domain
 			set { SetField(ref dependency, value, () => Dependency);}
 		}
 
+	    bool buttons;
+
+		public virtual bool Buttons 
+		{
+			get { return buttons; }
+			set { SetField(ref buttons, value, () => Buttons); }
+		}
+
 		public virtual List<string> ParseNextElements()
 		{
 			if(this.NextElementsUnparced == "")
@@ -65,6 +80,7 @@ namespace Vodovoz.Domain
 
 	public enum DialogueScriptWidget
 	{
+		welcome,
 		nowidget,
 		text,
 		counterparty,
@@ -74,6 +90,14 @@ namespace Vodovoz.Domain
 		checkschedule,
 		orderrepeat,
 		checkemptybottles,
-		constructor
+		constructor,
+		leaveandprint,
+		neworder,
+		equipments,
+		additional,
+		freerent,
+		paidrent,
+		sanitization,
+		changeandstamp
 	}
 }

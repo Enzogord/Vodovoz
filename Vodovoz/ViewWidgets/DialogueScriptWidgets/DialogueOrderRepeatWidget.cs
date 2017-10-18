@@ -94,8 +94,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		Order GetLastWaterOrder()
 		{
-			var order = OrderRepository.GetLatestWaterOrderForDeliveryPoint(UoW, dependencyDeliveryPoint);
-			return order;
+			return OrderRepository.GetLatestWaterOrderForDeliveryPoint(UoW, dependencyDeliveryPoint);
 		}
 
 		void ShowOrderItems(Order order)
@@ -117,33 +116,5 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		}
 	}
 
-	public class OrderItemWithSelect
-	{
-		bool selected;
 
-		public bool Selected
-		{
-			get { return selected; }
-			set { selected = value; }
-		}
-
-		OrderItem item;
-
-		public OrderItem Item
-		{
-			get { return item; }
-			set { item = value; }
-		}
-
-		public OrderItemWithSelect()
-		{
-			
-		}
-
-		public OrderItemWithSelect(OrderItem oItem)
-		{
-			Selected = true;
-			Item = oItem;
-		}
-	}
 }

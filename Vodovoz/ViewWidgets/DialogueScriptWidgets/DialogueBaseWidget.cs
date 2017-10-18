@@ -14,6 +14,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class DialogueBaseWidget : WidgetOnTdiTabBase
 	{
+		#region fields
 		ScriptTreeElement ste;
 		List<RadioButtonId<ScriptTreeElement>> subElements = new List<RadioButtonId<ScriptTreeElement>>();
 		IUnitOfWork UoW;
@@ -24,9 +25,14 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
 				widgetDone = false;			// Устанавливает, закончена ли работа с виджетом.
 
-		Gtk.Label labelText;
+		Gtk.Label label;
+		Gtk.Label dialogue;
 		Gtk.Button buttonNext;
+
+		Gtk.Button buttonYes;
+
 		IDialogueWidget subWidget;
+		#endregion
 
 		public event EventHandler<ScriptElementDoneEventArgs> ScriptElementDone;
 		public event EventHandler<ScriptElementDoneEventArgs> ScriptElementChanged;
@@ -42,8 +48,11 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void Configure()
 		{
-			labelText = new Gtk.Label(ste.Text);
-			labelText.Show();
+			label = new Gtk.Label(ste.Label);
+			label.Show();
+
+			dialogue = new Gtk.Label(ste.Text);
+			dialogue.Show();
 
 			buttonNext = new Gtk.Button();
 			buttonNext.Clicked += OnNextButtonPressed;
@@ -53,14 +62,51 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			hboxBottom.PackEnd(buttonNext, false, true, 0);
 			hboxBottom.Show();
 
-			vboxContainer.PackStart(labelText, true, true, 0);
+			//var hboxTop = new Gtk.HBox();
+			//hboxBottom.PackEnd(dialogue, false, true, 0);
+			//hboxBottom.Show();
+
+			vboxContainer.PackStart(label, true, true, 0);
+		    vboxContainer.PackStart(dialogue, false, false, 0);
+			//vboxContainer.PackStart(hboxTop, false, true, 0);
 			vboxContainer.PackEnd(hboxBottom, true, true, 0);
 
-			FillSubElements();
-
+			if(CheckButtons())
+			{
+				AddButtons();
+			}else
+			{
+				FillSubElements();
+			}
+		
 			AddSubWidget();
 
 			SetButtonNextParameters();
+		}
+
+		private bool CheckButtons()
+		{
+			var getWidget = UoW.Session.QueryOver<ScriptTreeElement>()
+			                   .Where(x => x.Buttons == true).List().FirstOrDefault();
+			//  .Select(x => x.Buttons).List().First();
+			if(getWidget != null)
+				return getWidget.Buttons;
+
+			return false;
+		}
+
+		private void AddButtons()
+		{
+			buttonYes = new Gtk.Button();
+			buttonYes.Clicked += OnbuttonOnePressed;
+			buttonYes.Label = "да";
+			//hboxBottom.PackEnd(buttonNext, false, true, 0);
+			buttonYes.Show();
+		}
+
+		private void OnbuttonOnePressed(object sender, EventArgs e)
+		{
+			buttonNext.Sensitive = true;
 		}
 
 		/// <summary>
@@ -154,6 +200,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.ScriptElementDone(this, new ScriptElementDoneEventArgs(ste.Name, next, result));
 		}
 
+		//непонятная проверка, есть ли в субэлементе 1 уровня ссылка на МНОЖЕСТВО субэлементов 2 уровня 
 		void OnSubElementRadioButtonActivated(object sender, EventArgs e)
 		{
 			if(sender is RadioButtonId<ScriptTreeElement>)
@@ -189,7 +236,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			for(int i = 0; i < e.Corrections.Length; i++)
 			{
-				labelText.Text = labelText.Text.Replace("#" + i.ToString() + "#", e.Corrections[i]);
+				label.Text = label.Text.Replace("#" + i.ToString() + "#", e.Corrections[i]);
 			}
 		}
 
@@ -200,7 +247,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			buttonNext.Label = ste.NextElementsUnparced == null || ste.NextElementsUnparced == "" ? "Завершить" : "Далее";
 
-			buttonNext.Sensitive = nextElementSet && customActionDone && !widgetDone;
+			buttonNext.Sensitive = nextElementSet ; //&& customActionDone && !widgetDone;
 		}
 
 		/// <summary>
@@ -212,6 +259,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			switch (widgetType)
 			{
+				case DialogueScriptWidget.welcome:
+					return new DialogueWelcomeWidget(UoW);
 				case DialogueScriptWidget.text:
 					return new DialogueTextWidget(UoW);
 				case DialogueScriptWidget.counterparty:
@@ -224,12 +273,21 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 					return new DialogueDateScheduleWidget(UoW);
 				case DialogueScriptWidget.checkschedule:
 					return new DialogueCheckScheduleWidget(UoW);
+				case DialogueScriptWidget.neworder:
+					return new DialogueNewOrderWidget(UoW);
 				case DialogueScriptWidget.orderrepeat:
 					return new DialogueOrderRepeatWidget(UoW);
 				case DialogueScriptWidget.checkemptybottles:
 					return new DialogueCheckEmptyBottlesWidget(UoW);
 				case DialogueScriptWidget.constructor:
 					return new DialogueConstructorWidget(UoW);
+				case DialogueScriptWidget.leaveandprint:
+					return new DialogueleaveAndPrintWidgets(UoW);
+				case DialogueScriptWidget.equipments:
+					return new DialogueEquipmentWidget(UoW);
+				case DialogueScriptWidget.additional:
+					return new DialogueAdditionalWidget(UoW);
+
 				default:
 					return null;
 			}
