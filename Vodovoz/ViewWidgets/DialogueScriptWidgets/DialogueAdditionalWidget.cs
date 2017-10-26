@@ -52,6 +52,40 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
 				.Finish();
 
+			treeItemsFreeRent.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
+				.AddColumn("Номенклатура").SetDataProperty(node => node.NomenclatureString)
+				.AddColumn("Кол-во").AddNumericRenderer(node => node.Count)
+				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0))
+				.AddSetter((c, node) => c.Digits = node.Nomenclature.Unit == null ? 0 : (uint)node.Nomenclature.Unit.Digits)
+				.AddSetter((c, node) => c.Editable = node.CanEditAmount).WidthChars(10)
+				.AddTextRenderer(node => node.Nomenclature.Unit == null ? String.Empty : node.Nomenclature.Unit.Name, false)
+				.AddColumn("Цена").AddNumericRenderer(node => node.Price).Digits(2).WidthChars(10)
+				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0)).Editing(true)
+				.AddSetter((c, node) => c.Editable = Nomenclature.GetCategoriesWithEditablePrice().Contains(node.Nomenclature.Category))
+				.AddTextRenderer(node => CurrencyWorks.CurrencyShortName, false)
+				.AddColumn("В т.ч. НДС").AddTextRenderer(node => CurrencyWorks.GetShortCurrencyString(node.IncludeNDS))
+				.AddColumn("Сумма").AddTextRenderer(node => CurrencyWorks.GetShortCurrencyString(node.Sum))
+				.AddColumn("Скидка %").AddNumericRenderer(node => node.Discount)
+				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
+				.Finish();
+
+			treeItemsPaidRent.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
+				.AddColumn("Номенклатура").SetDataProperty(node => node.NomenclatureString)
+				.AddColumn("Кол-во").AddNumericRenderer(node => node.Count)
+				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0))
+				.AddSetter((c, node) => c.Digits = node.Nomenclature.Unit == null ? 0 : (uint)node.Nomenclature.Unit.Digits)
+				.AddSetter((c, node) => c.Editable = node.CanEditAmount).WidthChars(10)
+				.AddTextRenderer(node => node.Nomenclature.Unit == null ? String.Empty : node.Nomenclature.Unit.Name, false)
+				.AddColumn("Цена").AddNumericRenderer(node => node.Price).Digits(2).WidthChars(10)
+				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0)).Editing(true)
+				.AddSetter((c, node) => c.Editable = Nomenclature.GetCategoriesWithEditablePrice().Contains(node.Nomenclature.Category))
+				.AddTextRenderer(node => CurrencyWorks.CurrencyShortName, false)
+				.AddColumn("В т.ч. НДС").AddTextRenderer(node => CurrencyWorks.GetShortCurrencyString(node.IncludeNDS))
+				.AddColumn("Сумма").AddTextRenderer(node => CurrencyWorks.GetShortCurrencyString(node.Sum))
+				.AddColumn("Скидка %").AddNumericRenderer(node => node.Discount)
+				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
+				.Finish();
+
 			newOrder = new Order();
 
 

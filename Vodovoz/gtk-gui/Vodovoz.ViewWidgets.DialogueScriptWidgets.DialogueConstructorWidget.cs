@@ -30,8 +30,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			w1.Expand = false;
 			w1.Fill = false;
 			this.Add(this.hbox1);
-			if ((this.Child != null))
-			{
+			if((this.Child != null)) {
 				this.Child.ShowAll();
 			}
 			this.Hide();

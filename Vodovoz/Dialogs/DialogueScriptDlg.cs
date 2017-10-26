@@ -73,6 +73,14 @@ namespace Vodovoz.Dialogs
 			return allScriptElements;
 		}
 
+		//TODO - нужно запретить нажатие, если поле выбора пустое
+		//TODO - заблокировать кнопку после нажатия
+
+		/// <summary>
+		/// Обработчик перехода 
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">E.</param>
 		void OnScriptElementDone(object sender, ScriptElementDoneEventArgs e)
 		{
 			if(e.Result != null)
@@ -116,7 +124,10 @@ namespace Vodovoz.Dialogs
 			}
 		}
 	
-
+		/// <summary>
+		/// Добавляем следующий виджет + подписки на события
+		/// </summary>
+		/// <param name="ste">Ste.</param>
 		public void NextElement(ScriptTreeElement ste)
 		{
 			var element = new DialogueBaseWidget(UoW, ste, GetDependency(ste));
@@ -132,6 +143,11 @@ namespace Vodovoz.Dialogs
 			}
 		}
 
+		/// <summary>
+		/// Получаем зависимости
+		/// </summary>
+		/// <returns>The dependency.</returns>
+		/// <param name="ste">Ste.</param>
 		ScriptTreeObject GetDependency(ScriptTreeElement ste)
 		{
 			if(ste.Dependency != null && scriptTreeObjects.ContainsKey(ste.Dependency))

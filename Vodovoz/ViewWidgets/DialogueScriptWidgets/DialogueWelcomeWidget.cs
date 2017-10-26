@@ -1,6 +1,7 @@
 ﻿using System;
 using QSOrmProject;
 using Vodovoz.Domain;
+using Vodovoz.Repository;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
@@ -21,7 +22,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void Configure()
 		{
-
+			var employeeVar = EmployeeRepository.ActiveEmployeeOrderedQuery();
+			label1.LabelProp = employeeVar.ToString();
 		}
 
 		public void SendResult()
@@ -35,12 +37,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		protected void OnEntryTextActivated(object sender, EventArgs e)
 		{
-			//if(entryText.Text == resultString) {
-			//	return;
-			//}
-
-			//resultString = entryText.Text;
-			//SendResult();
+ 
 		}
 
 		public void RefreshDependency(ScriptTreeObject ste)

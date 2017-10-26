@@ -391,7 +391,7 @@ namespace Vodovoz
 			this.notebook1 = new global::Gtk.Notebook();
 			this.notebook1.CanFocus = true;
 			this.notebook1.Name = "notebook1";
-			this.notebook1.CurrentPage = 2;
+			this.notebook1.CurrentPage = 0;
 			// Container child notebook1.Gtk.Notebook+NotebookChild
 			this.vbox3 = new global::Gtk.VBox();
 			this.vbox3.Name = "vbox3";
@@ -1192,11 +1192,11 @@ namespace Vodovoz
 			w86.Expand = false;
 			w86.Fill = false;
 			// Container child hbox11.Gtk.Box+BoxChild
-			this.yspinDiscountOrder = new global::Gamma.GtkWidgets.ySpinButton(0, 100, 1);
+			this.yspinDiscountOrder = new global::Gamma.GtkWidgets.ySpinButton(0D, 100D, 1D);
 			this.yspinDiscountOrder.CanFocus = true;
 			this.yspinDiscountOrder.Name = "yspinDiscountOrder";
-			this.yspinDiscountOrder.Adjustment.PageIncrement = 10;
-			this.yspinDiscountOrder.ClimbRate = 1;
+			this.yspinDiscountOrder.Adjustment.PageIncrement = 10D;
+			this.yspinDiscountOrder.ClimbRate = 1D;
 			this.yspinDiscountOrder.Numeric = true;
 			this.yspinDiscountOrder.ValueAsDecimal = 0m;
 			this.yspinDiscountOrder.ValueAsInt = 0;
@@ -1277,11 +1277,11 @@ namespace Vodovoz
 			w94.XOptions = ((global::Gtk.AttachOptions)(4));
 			w94.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.spinBottlesReturn = new global::Gamma.GtkWidgets.ySpinButton(0, 10000, 1);
+			this.spinBottlesReturn = new global::Gamma.GtkWidgets.ySpinButton(0D, 10000D, 1D);
 			this.spinBottlesReturn.CanFocus = true;
 			this.spinBottlesReturn.Name = "spinBottlesReturn";
-			this.spinBottlesReturn.Adjustment.PageIncrement = 10;
-			this.spinBottlesReturn.ClimbRate = 1;
+			this.spinBottlesReturn.Adjustment.PageIncrement = 10D;
+			this.spinBottlesReturn.ClimbRate = 1D;
 			this.spinBottlesReturn.Numeric = true;
 			this.spinBottlesReturn.ValueAsDecimal = 0m;
 			this.spinBottlesReturn.ValueAsInt = 0;
@@ -1291,11 +1291,11 @@ namespace Vodovoz
 			w95.RightAttach = ((uint)(2));
 			w95.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
-			this.spinSumDifference = new global::Gamma.GtkWidgets.ySpinButton(-100000, 100000, 1);
+			this.spinSumDifference = new global::Gamma.GtkWidgets.ySpinButton(-100000D, 100000D, 1D);
 			this.spinSumDifference.CanFocus = true;
 			this.spinSumDifference.Name = "spinSumDifference";
-			this.spinSumDifference.Adjustment.PageIncrement = 10;
-			this.spinSumDifference.ClimbRate = 1;
+			this.spinSumDifference.Adjustment.PageIncrement = 10D;
+			this.spinSumDifference.ClimbRate = 1D;
 			this.spinSumDifference.Numeric = true;
 			this.spinSumDifference.ValueAsDecimal = 0m;
 			this.spinSumDifference.ValueAsInt = 0;

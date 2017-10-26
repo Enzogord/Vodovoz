@@ -1,5 +1,6 @@
 ﻿using System;
 using QSOrmProject;
+using QSTDI;
 using Vodovoz.Domain;
 using Vodovoz.Domain.Client;
 
@@ -10,6 +11,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	{
 		DeliveryPoint resultDeliveryPoint;
 		Counterparty dependencyCounterparty = new Counterparty();
+		DateSchedule resultDateSchedule = new DateSchedule();
 		IUnitOfWork UoW;
 
 		public DialogueleaveAndPrintWidgets(IUnitOfWork UoW)
@@ -21,34 +23,47 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;
 		public event EventHandler<TextCorrectionsPresentEventArgs> TextCorrectionsPresent;
 
-		//public void RefreshDependency(ScriptTreeObject ste)
-		//{
-		//	//dependencyCounterparty = GetDependency(ste);
-		//	//referenceDeliveryPoint.RepresentationModel = new ViewModel.ClientDeliveryPointsVM(UoW, dependencyCounterparty);
-		//	//referenceDeliveryPoint.Subject = null;
-		//}
-
-		//public void SendResult()
-		//{
-		//	//if(resultDeliveryPoint == null) {
-		//	//	this.SubWidgetDone(this, new SubWidgetDoneEventArgs(null));
-		//	//	return;
-		//	//}
-
-		//	//var result = new ScriptTreeObject {
-		//	//	ResultObjectType = resultDeliveryPoint.GetType(),
-		//	//	ResultObject = resultDeliveryPoint as object
-		//	//};
-		//	//this.SubWidgetDone?.Invoke(this, new SubWidgetDoneEventArgs(result));
-		//}
+		public void RefreshDependency(ScriptTreeObject ste)
+		{
+			var dependency = GetDependency(ste);
+			labelDate.LabelProp = dependency.Date.ToString();
+		}
 
 		protected void OnButtonPrintClicked(object sender, EventArgs e)
 		{
-
+			ITdiTab mytab = TdiHelper.FindMyTab(this);
+			if(mytab == null)
+				return;
+			
 			//var document = Additions.Logistic.PrintRouteListHelper.GetRDLRouteList(UoW, Entity);
-			//this.TabParent.OpenTab(
-			//QSTDI.TdiTabBase.GenerateHashName<QSReport.ReportViewDlg>(),
+			//mytab.TabParent.OpenTab(
+			//TdiTabBase.GenerateHashName<QSReport.ReportViewDlg>(),
 			//() => new QSReport.ReportViewDlg(document));
+
+
+			//var allList = treeDocuments.GetSelectedObjects().Cast<OrderDocument>().ToList();
+			//if(allList.Count <= 0)
+			//	return;
+
+			//allList.OfType<ITemplateOdtDocument>().ToList().ForEach(x => x.PrepareTemplate(UoW));
+
+			//string whatToPrint = allList.Count > 1
+			//	? "документов"
+			//	: "документа \"" + allList.First().Type.GetEnumTitle() + "\"";
+			//if(UoWGeneric.HasChanges && CommonDialogs.SaveBeforePrint(typeof(Order), whatToPrint))
+			//	UoWGeneric.Save();
+
+			//var selectedPrintableRDLDocuments = treeDocuments.GetSelectedObjects().Cast<OrderDocument>()
+			//	.Where(doc => doc.PrintType == PrinterType.RDL).ToList();
+			//if(selectedPrintableRDLDocuments.Count > 0) {
+			//	DocumentPrinter.PrintAll(selectedPrintableRDLDocuments);
+			//}
+
+			//var selectedPrintableODTDocuments = treeDocuments.GetSelectedObjects()
+			//	.OfType<ITemplatePrntDoc>().ToList();
+			//if(selectedPrintableODTDocuments.Count > 0) {
+			//	TemplatePrinter.PrintAll(selectedPrintableODTDocuments);
+			//}
 
 		}
 
@@ -66,31 +81,25 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.SubWidgetDone?.Invoke(this, new SubWidgetDoneEventArgs(result));
 		}
 
-		protected void OnReferenceDeliveryPointChanged(object sender, EventArgs e)
-		{
-			//if(referenceDeliveryPoint.GetSubject<DeliveryPoint>() == resultDeliveryPoint) {
-			//	return;
-			//}
+		//protected void OnReferenceDeliveryPointChanged(object sender, EventArgs e)
+		//{
+		//	//if(referenceDeliveryPoint.GetSubject<DeliveryPoint>() == resultDeliveryPoint) {
+		//	//	return;
+		//	//}
 
-			//resultDeliveryPoint = referenceDeliveryPoint.GetSubject<DeliveryPoint>();
-			SendResult();
-		}
+		//	//resultDeliveryPoint = referenceDeliveryPoint.GetSubject<DeliveryPoint>();
+		//	SendResult();
+		//}
 
-		Counterparty GetDependency(ScriptTreeObject dependencyObject)
+		DateSchedule GetDependency(ScriptTreeObject dependencyObject)
 		{
-			if(dependencyObject != null && dependencyObject.ResultObject is Counterparty) {
-				var dependency = dependencyObject.ResultObject as Counterparty;
+			if(dependencyObject != null && dependencyObject.ResultObject is DateSchedule) {
+				var dependency = dependencyObject.ResultObject as DateSchedule;
 				return dependency;
 			}
 
 			return null;
 		}
 
-		public void RefreshDependency(ScriptTreeObject ste)
-		{
-			dependencyCounterparty = GetDependency(ste);
-			//referenceDeliveryPoint.RepresentationModel = new ViewModel.ClientDeliveryPointsVM(UoW, dependencyCounterparty);
-			//referenceDeliveryPoint.Subject = null;
-		}
 	}
 }

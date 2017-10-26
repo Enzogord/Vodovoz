@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using QSOrmProject;
 using QSWidgetLib;
@@ -8,6 +8,8 @@ using Gamma.Utilities;
 using NHibernate.Criterion;
 using Vodovoz.Dialogs;
 using QSTDI;
+using Vodovoz.Repository;
+using QSProjectsLib;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
@@ -19,14 +21,14 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		List<RadioButtonId<ScriptTreeElement>> subElements = new List<RadioButtonId<ScriptTreeElement>>();
 		IUnitOfWork UoW;
 		ScriptTreeElement next;
-		ScriptTreeObject result = null, 
-							dependencyObject;
+		ScriptTreeObject result = null,
+						 dependencyObject;
 		bool nextElementSet = true,         // Устанавливает, выбран ли следующий элемент. Становится false, если есть саб-элементы.
-				customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
-				widgetDone = false;			// Устанавливает, закончена ли работа с виджетом.
+			 customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
+			 widgetDone = false;         // Устанавливает, закончена ли работа с виджетом.
 
-		Gtk.Label label;
-		Gtk.Label dialogue;
+		Gtk.Label  label;
+		Gtk.Label  dialogue;
 		Gtk.Button buttonNext;
 
 		Gtk.Button buttonYes;
@@ -48,10 +50,15 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void Configure()
 		{
+			//var employeeVar = EmployeeRepository.ActiveEmployeeOrderedQuery().Take(1);
+			//employeeVar
+			//var employeeVar2 = QSMain.User.Name;
+			var employeeName = EmployeeRepository.GetEmployeeForCurrentUser(UoW).Name;
+
 			label = new Gtk.Label(ste.Label);
 			label.Show();
 
-			dialogue = new Gtk.Label(ste.Text);
+			dialogue = new Gtk.Label(ste.Text.Replace("!+", employeeName));
 			dialogue.Show();
 
 			buttonNext = new Gtk.Button();
@@ -67,18 +74,16 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			//hboxBottom.Show();
 
 			vboxContainer.PackStart(label, true, true, 0);
-		    vboxContainer.PackStart(dialogue, false, false, 0);
+			vboxContainer.PackStart(dialogue, false, false, 0);
 			//vboxContainer.PackStart(hboxTop, false, true, 0);
 			vboxContainer.PackEnd(hboxBottom, true, true, 0);
 
-			if(CheckButtons())
-			{
+			if(CheckButtons()) {
 				AddButtons();
-			}else
-			{
+			} else {
 				FillSubElements();
 			}
-		
+
 			AddSubWidget();
 
 			SetButtonNextParameters();
@@ -87,7 +92,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		private bool CheckButtons()
 		{
 			var getWidget = UoW.Session.QueryOver<ScriptTreeElement>()
-			                   .Where(x => x.Buttons == true).List().FirstOrDefault();
+							   .Where(x => x.Buttons == true).List().FirstOrDefault();
 			//  .Select(x => x.Buttons).List().First();
 			if(getWidget != null)
 				return getWidget.Buttons;
@@ -115,41 +120,36 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		public void FillSubElements()
 		{
 			List<string> subElementStrings = ste.ParseNextElements();
-			if(subElementStrings.Count < 1) 
-			{
+			if(subElementStrings.Count < 1) {
 				next = null;
 				return;
 			}
 
-			if(subElementStrings.Count == 1)
-			{
+			if(subElementStrings.Count == 1) {
 				SetNextElement(subElementStrings.First());
 				return;
 			}
 
 			var subElementsQuery = new List<ScriptTreeElement>();
 
-			foreach(string subElementString in subElementStrings)
-			{
+			foreach(string subElementString in subElementStrings) {
 				subElementsQuery.AddRange(UoW.Session.QueryOver<ScriptTreeElement>()
-				                     .Where(x => x.Name == subElementString)
-				                     .List());
+									 .Where(x => x.Name == subElementString)
+									 .List());
 			}
 
-		//	var subElementsQuery = UoW.Session.QueryOver<ScriptTreeElement>()
-		//	                          .Where(x => subElementStrings.Contains(x.Name))
-		//	                          .List();
+			//	var subElementsQuery = UoW.Session.QueryOver<ScriptTreeElement>()
+			//	                          .Where(x => subElementStrings.Contains(x.Name))
+			//	                          .List();
 
 			var hboxSubElements = new Gtk.HBox();
 
-			foreach(ScriptTreeElement subElement in subElementsQuery)
-			{
+			foreach(ScriptTreeElement subElement in subElementsQuery) {
 				var radioSubElement = new RadioButtonId<ScriptTreeElement>(subElement.Text);
 				radioSubElement.ID = subElement;
 				radioSubElement.Show();
 
-				if(subElements.Count > 0)
-				{
+				if(subElements.Count > 0) {
 					radioSubElement.Group = subElements.First().Group;
 				}
 
@@ -168,13 +168,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			subWidget = GetSubWidgetType(ste.Widget);
 
-			if(subWidget != null)
-			{
+			if(subWidget != null) {
 				subWidget.SubWidgetDone += OnSubWidgetDone;
 				subWidget.TextCorrectionsPresent += OnTextCorrectionsPresent;
 				(subWidget as Gtk.Widget).Show();
 				vboxContainer.PackEnd(subWidget as Gtk.Widget);
-				customActionDone = false;
+				//customActionDone = false;
 				subWidget.RefreshDependency(dependencyObject);
 			}
 		}
@@ -192,7 +191,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.next = nextElementQuery;
 			nextElementSet = true;
 		}
-
+		//Обработчик кнопки перехода
 		void OnNextButtonPressed(object sender, EventArgs e)
 		{
 			widgetDone = true;
@@ -203,8 +202,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		//непонятная проверка, есть ли в субэлементе 1 уровня ссылка на МНОЖЕСТВО субэлементов 2 уровня 
 		void OnSubElementRadioButtonActivated(object sender, EventArgs e)
 		{
-			if(sender is RadioButtonId<ScriptTreeElement>)
-			{
+			if(sender is RadioButtonId<ScriptTreeElement>) {
 				string nextElement = (sender as RadioButtonId<ScriptTreeElement>).ID.NextElementsUnparced;
 
 				if(nextElement.Contains(",")) // Так быть не должно, по крайней мере, пока что.
@@ -222,20 +220,18 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			result = e.Result;
 
-			if(customActionDone && widgetDone)
-			{
+			if(customActionDone && widgetDone) {
 				this.ScriptElementChanged?.Invoke(this, new ScriptElementDoneEventArgs(ste.Name, next, result));
 			}
 
 			customActionDone = true;
-		//	(sender as Gtk.Widget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
+			(sender as Gtk.Widget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
 			SetButtonNextParameters();
 		}
 
 		void OnTextCorrectionsPresent(object sender, TextCorrectionsPresentEventArgs e)
 		{
-			for(int i = 0; i < e.Corrections.Length; i++)
-			{
+			for(int i = 0; i < e.Corrections.Length; i++) {
 				label.Text = label.Text.Replace("#" + i.ToString() + "#", e.Corrections[i]);
 			}
 		}
@@ -247,7 +243,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			buttonNext.Label = ste.NextElementsUnparced == null || ste.NextElementsUnparced == "" ? "Завершить" : "Далее";
 
-			buttonNext.Sensitive = nextElementSet ; //&& customActionDone && !widgetDone;
+			buttonNext.Sensitive = nextElementSet && customActionDone && !widgetDone;
 		}
 
 		/// <summary>
@@ -257,8 +253,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		/// <param name="widgetType">Енам с типом виджета.</param>
 		IDialogueWidget GetSubWidgetType(DialogueScriptWidget widgetType)
 		{
-			switch (widgetType)
-			{
+			switch(widgetType) {
 				case DialogueScriptWidget.welcome:
 					return new DialogueWelcomeWidget(UoW);
 				case DialogueScriptWidget.text:
@@ -287,6 +282,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 					return new DialogueEquipmentWidget(UoW);
 				case DialogueScriptWidget.additional:
 					return new DialogueAdditionalWidget(UoW);
+
+				case DialogueScriptWidget.changeandstamp:
+					return new DialogueChangeAndStampWidget(UoW);
 
 				default:
 					return null;

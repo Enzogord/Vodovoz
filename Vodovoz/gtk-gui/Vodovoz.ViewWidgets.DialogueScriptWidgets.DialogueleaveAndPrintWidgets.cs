@@ -4,9 +4,19 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	public partial class DialogueleaveAndPrintWidgets
 	{
-		private global::Gtk.HBox hbox1;
+		private global::Gtk.VBox vbox1;
+
+		private global::Gtk.HBox hbox2;
+
+		private global::Gtk.Label labelDate;
 
 		private global::Gtk.Button buttonPrint;
+
+		private global::Gtk.HBox hbox1;
+
+		private global::Gtk.ScrolledWindow GtkScrolledWindow;
+
+		private global::Gtk.TreeView treeview1;
 
 		protected virtual void Build()
 		{
@@ -15,21 +25,57 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			global::Stetic.BinContainer.Attach(this);
 			this.Name = "Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueleaveAndPrintWidgets";
 			// Container child Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueleaveAndPrintWidgets.Gtk.Container+ContainerChild
-			this.hbox1 = new global::Gtk.HBox();
-			this.hbox1.Name = "hbox1";
-			this.hbox1.Spacing = 6;
-			// Container child hbox1.Gtk.Box+BoxChild
+			this.vbox1 = new global::Gtk.VBox();
+			this.vbox1.Name = "vbox1";
+			this.vbox1.Spacing = 6;
+			// Container child vbox1.Gtk.Box+BoxChild
+			this.hbox2 = new global::Gtk.HBox();
+			this.hbox2.Name = "hbox2";
+			this.hbox2.Spacing = 6;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.labelDate = new global::Gtk.Label();
+			this.labelDate.Name = "labelDate";
+			this.labelDate.Xalign = 0F;
+			this.hbox2.Add(this.labelDate);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.labelDate]));
+			w1.Position = 0;
+			w1.Fill = false;
+			// Container child hbox2.Gtk.Box+BoxChild
 			this.buttonPrint = new global::Gtk.Button();
 			this.buttonPrint.CanFocus = true;
 			this.buttonPrint.Name = "buttonPrint";
 			this.buttonPrint.UseUnderline = true;
 			this.buttonPrint.Label = global::Mono.Unix.Catalog.GetString("Распечатать");
-			this.hbox1.Add(this.buttonPrint);
-			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.buttonPrint]));
-			w1.Position = 0;
-			w1.Expand = false;
-			w1.Fill = false;
-			this.Add(this.hbox1);
+			this.hbox2.Add(this.buttonPrint);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.buttonPrint]));
+			w2.Position = 1;
+			w2.Expand = false;
+			w2.Fill = false;
+			this.vbox1.Add(this.hbox2);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.hbox2]));
+			w3.Position = 1;
+			w3.Expand = false;
+			w3.Fill = false;
+			// Container child vbox1.Gtk.Box+BoxChild
+			this.hbox1 = new global::Gtk.HBox();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
+			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
+			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
+			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
+			this.treeview1 = new global::Gtk.TreeView();
+			this.treeview1.CanFocus = true;
+			this.treeview1.Name = "treeview1";
+			this.GtkScrolledWindow.Add(this.treeview1);
+			this.hbox1.Add(this.GtkScrolledWindow);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.GtkScrolledWindow]));
+			w5.Position = 1;
+			this.vbox1.Add(this.hbox1);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.hbox1]));
+			w6.Position = 2;
+			this.Add(this.vbox1);
 			if ((this.Child != null))
 			{
 				this.Child.ShowAll();

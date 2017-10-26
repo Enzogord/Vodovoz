@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using QSOrmProject;
 using Vodovoz.Domain;
+using Vodovoz.Domain.Orders;
 
 namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
@@ -10,7 +12,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		string resultString;
 		IUnitOfWork UoW;
 
-		public DialogueChangeAndStampWidget()
+		Dictionary<string, ScriptTreeObject> dialogueResults = new Dictionary<string, ScriptTreeObject>();
+
+		public DialogueChangeAndStampWidget(IUnitOfWork UoW)
 		{
 			this.Build();
 			this.UoW = UoW;
@@ -35,7 +39,42 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void RefreshDependency(ScriptTreeObject ste)
 		{
+			//dialogueResults = GetDialogueResults(ste);
+			var dialogueResults = GetDependency(ste);
+			//label.LabelProp = GetOrderItems(dialogueResults).ToString();
+		}
 
+		DateSchedule GetDependency(ScriptTreeObject dependencyObject)
+		{
+			if(dependencyObject != null && dependencyObject.ResultObject is DateSchedule) {
+				var dependency = dependencyObject.ResultObject as DateSchedule;
+				return dependency;
+			}
+
+			return null;
+		}
+
+		//Dictionary<string, ScriptTreeObject> GetDialogueResults(ScriptTreeObject results)
+		//{
+		//	if(results != null && results.ResultObject is Dictionary<string, ScriptTreeObject>) {
+		//		var resultsDictionary = results.ResultObject as Dictionary<string, ScriptTreeObject>;
+		//		return resultsDictionary;
+		//	}
+
+		//	return null;
+		//}
+
+		decimal GetOrderItems(Dictionary<string, ScriptTreeObject> results)
+		{
+			decimal items = 0;
+			foreach(KeyValuePair<string, ScriptTreeObject> pair in results) {
+				if(pair.Value.ResultObject is List<OrderItem>) {
+					foreach(OrderItem item in pair.Value.ResultObject as List<OrderItem>) {
+						items += item.Price;
+					}
+				}
+			}
+			return items;
 		}
 	}
 }

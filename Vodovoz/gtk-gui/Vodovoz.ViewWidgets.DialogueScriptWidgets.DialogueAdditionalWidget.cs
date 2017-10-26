@@ -20,13 +20,13 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 
-		private global::Gamma.GtkWidgets.yTreeView treeItems1;
+		private global::Gamma.GtkWidgets.yTreeView treeItemsFreeRent;
 
 		private global::Gtk.Label label3;
 
 		private global::Gtk.ScrolledWindow GtkScrolledWindow2;
 
-		private global::Gamma.GtkWidgets.yTreeView treeItems2;
+		private global::Gamma.GtkWidgets.yTreeView treeItemsPaidRent;
 
 		private global::Gtk.HBox hbox1;
 
@@ -103,10 +103,10 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
 			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
-			this.treeItems1 = new global::Gamma.GtkWidgets.yTreeView();
-			this.treeItems1.CanFocus = true;
-			this.treeItems1.Name = "treeItems1";
-			this.GtkScrolledWindow1.Add(this.treeItems1);
+			this.treeItemsFreeRent = new global::Gamma.GtkWidgets.yTreeView();
+			this.treeItemsFreeRent.CanFocus = true;
+			this.treeItemsFreeRent.Name = "treeItemsFreeRent";
+			this.GtkScrolledWindow1.Add(this.treeItemsFreeRent);
 			this.vbox1.Add(this.GtkScrolledWindow1);
 			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow1]));
 			w9.Position = 4;
@@ -124,10 +124,10 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.GtkScrolledWindow2.Name = "GtkScrolledWindow2";
 			this.GtkScrolledWindow2.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow2.Gtk.Container+ContainerChild
-			this.treeItems2 = new global::Gamma.GtkWidgets.yTreeView();
-			this.treeItems2.CanFocus = true;
-			this.treeItems2.Name = "treeItems2";
-			this.GtkScrolledWindow2.Add(this.treeItems2);
+			this.treeItemsPaidRent = new global::Gamma.GtkWidgets.yTreeView();
+			this.treeItemsPaidRent.CanFocus = true;
+			this.treeItemsPaidRent.Name = "treeItemsPaidRent";
+			this.GtkScrolledWindow2.Add(this.treeItemsPaidRent);
 			this.vbox1.Add(this.GtkScrolledWindow2);
 			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow2]));
 			w12.Position = 7;

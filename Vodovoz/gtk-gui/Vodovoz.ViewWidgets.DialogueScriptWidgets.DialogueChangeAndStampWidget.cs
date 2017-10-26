@@ -4,12 +4,38 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 {
 	public partial class DialogueChangeAndStampWidget
 	{
+		private global::Gtk.VBox vbox3;
+
+		private global::Gtk.HBox hbox2;
+
+		private global::Gtk.Label label;
+
 		protected virtual void Build()
 		{
 			global::Stetic.Gui.Initialize(this);
 			// Widget Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueChangeAndStampWidget
 			global::Stetic.BinContainer.Attach(this);
 			this.Name = "Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueChangeAndStampWidget";
+			// Container child Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueChangeAndStampWidget.Gtk.Container+ContainerChild
+			this.vbox3 = new global::Gtk.VBox();
+			this.vbox3.Name = "vbox3";
+			this.vbox3.Spacing = 6;
+			// Container child vbox3.Gtk.Box+BoxChild
+			this.hbox2 = new global::Gtk.HBox();
+			this.hbox2.Name = "hbox2";
+			this.hbox2.Spacing = 6;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.label = new global::Gtk.Label();
+			this.label.Name = "label";
+			this.hbox2.Add(this.label);
+			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.label]));
+			w1.Position = 0;
+			this.vbox3.Add(this.hbox2);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox2]));
+			w2.Position = 0;
+			w2.Expand = false;
+			w2.Fill = false;
+			this.Add(this.vbox3);
 			if ((this.Child != null))
 			{
 				this.Child.ShowAll();
