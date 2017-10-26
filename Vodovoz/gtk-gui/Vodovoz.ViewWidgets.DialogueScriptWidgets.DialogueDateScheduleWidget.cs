@@ -35,9 +35,6 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.referenceSchedule = new global::Gamma.Widgets.yEntryReference();
 			this.referenceSchedule.Events = ((global::Gdk.EventMask)(256));
 			this.referenceSchedule.Name = "referenceSchedule";
-			this.referenceSchedule.DisplayFields = new string[] {
-					"Name"};
-			this.referenceSchedule.DisplayFormatString = "{0}";
 			this.hbox1.Add(this.referenceSchedule);
 			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.referenceSchedule]));
 			w2.Position = 1;

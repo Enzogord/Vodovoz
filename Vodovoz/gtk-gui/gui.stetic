@@ -43952,7 +43952,7 @@
       </widget>
     </child>
   </widget>
-    <widget class="Gtk.Bin" id="Vodovoz.ReportsParameters.Logistic.ShipmentReport" design-size="300 300">
+  <widget class="Gtk.Bin" id="Vodovoz.ReportsParameters.Logistic.ShipmentReport" design-size="300 300">
     <property name="MemberName" />
     <property name="Visible">False</property>
     <child>
@@ -44182,8 +44182,6 @@
           <widget class="Gamma.Widgets.yEntryReference" id="referenceSchedule">
             <property name="MemberName" />
             <property name="Events">ButtonPressMask</property>
-            <property name="DisplayFields">Name</property>
-            <property name="DisplayFormatString">{0}</property>
             <signal name="Changed" handler="OnReferenceScheduleChanged" />
           </widget>
           <packing>
