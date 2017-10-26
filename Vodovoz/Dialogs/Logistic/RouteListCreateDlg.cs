@@ -6,12 +6,12 @@ using Gtk;
 using NLog;
 using QSOrmProject;
 using QSProjectsLib;
+using QSReport;
 using QSValidation;
 using Vodovoz.Additions.Logistic;
 using Vodovoz.Additions.Logistic.RouteOptimization;
 using Vodovoz.Domain.Employees;
 using Vodovoz.Domain.Logistic;
-using Vodovoz.Domain.Orders;
 using Vodovoz.Repository.Logistics;
 
 namespace Vodovoz
@@ -130,8 +130,22 @@ namespace Vodovoz
 			{
 				this.TabParent.OpenTab(
 					QSTDI.TdiTabBase.GenerateHashName<QSReport.ReportViewDlg>(),
-					() => new QSReport.ReportViewDlg(document));
+					() => CreateReportView(document, choise));
 			}
+		}
+
+		ReportViewDlg CreateReportView(QSReport.ReportInfo document, RouteListPrintableDocuments choise)
+		{
+			var dlg = new QSReport.ReportViewDlg(document);
+			if(choise == RouteListPrintableDocuments.RouteList)
+				dlg.ReportPrinted += Dlg_ReportPrinted;
+			return dlg;
+		}
+
+		void Dlg_ReportPrinted(object sender, EventArgs e)
+		{
+			Entity.Printed = true;
+			Save();
 		}
 
 		public override bool Save ()
@@ -187,17 +201,21 @@ namespace Vodovoz
 				}
 
 				//Строим маршрут для МЛ.
-				RouteOptimizer optimizer = new RouteOptimizer();
-				var newRoute = optimizer.RebuidOneRoute(Entity);
-				if(newRoute != null) {
-					createroutelistitemsview1.DisableColumnsUpdate = true;
-					newRoute.UpdateAddressOrderInRealRoute(Entity);
-					createroutelistitemsview1.DisableColumnsUpdate = false;
-					var noPlan = Entity.Addresses.Count(x => !x.PlanTimeStart.HasValue);
-					if(noPlan > 0)
-						MessageDialogWorks.RunWarningDialog($"Для маршрута незапланировано {noPlan} адресов.");
-				} else {
-					MessageDialogWorks.RunWarningDialog($"Маршрут не был перестроен.");
+				if(!Entity.Printed || MessageDialogWorks.RunQuestionWithTitleDialog("Перестроить маршрут?", "Этот маршрутный лист уже был когда-то напечатан. При новом построении маршрута порядок адресов может быть другой. При продолжении обязательно перепечатайте этот МЛ.\nПерестроить маршрут?")) {
+					RouteOptimizer optimizer = new RouteOptimizer();
+					var newRoute = optimizer.RebuidOneRoute(Entity);
+					if(newRoute != null) {
+						createroutelistitemsview1.DisableColumnsUpdate = true;
+						newRoute.UpdateAddressOrderInRealRoute(Entity);
+						//Рассчитываем расстояние
+						Entity.RecalculatePlanedDistance(new Tools.Logistic.RouteGeometryCalculator(Tools.Logistic.DistanceProvider.Osrm));
+						createroutelistitemsview1.DisableColumnsUpdate = false;
+						var noPlan = Entity.Addresses.Count(x => !x.PlanTimeStart.HasValue);
+						if(noPlan > 0)
+							MessageDialogWorks.RunWarningDialog($"Для маршрута незапланировано {noPlan} адресов.");
+					} else {
+						MessageDialogWorks.RunWarningDialog($"Маршрут не был перестроен.");
+					}
 				}
 
 				Save();

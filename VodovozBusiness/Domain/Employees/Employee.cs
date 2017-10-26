@@ -213,6 +213,22 @@ namespace Vodovoz.Domain.Employees
 			set { SetField(ref defaultForwarder, value, () => DefaultForwarder); }
 		}
 
+		private bool largusDriver;
+
+		[Display(Name = "Сотрудник - водитель Ларгуса")]
+		public virtual bool LargusDriver{
+			get { return largusDriver; }
+			set {SetField(ref largusDriver, value, () => LargusDriver);}
+		}
+
+		private float driverSpeed = 1;
+
+		[Display(Name = "Скорость работы водителя")]
+		public virtual float DriverSpeed {
+			get { return driverSpeed; }
+			set { SetField(ref driverSpeed, value, () => DriverSpeed); }
+		}
+
 		private short tripPriority = 6;
 
 		/// <summary>
@@ -243,6 +259,32 @@ namespace Vodovoz.Domain.Employees
 				}
 				return observableDistricts;
 			}
+		}
+
+		WageCalculationType wageCalcType;
+
+		[Display(Name = "Тип расчёта зарплаты")]
+		public virtual WageCalculationType WageCalcType
+		{
+			get { return wageCalcType; }
+			set { SetField(ref wageCalcType, value, () => WageCalcType);}
+		}
+
+		decimal wageCalcRate;
+
+		[Display(Name = "Ставка для расчёта зарплаты")]
+		public virtual decimal WageCalcRate
+		{
+			get { return wageCalcRate; }
+			set { SetField(ref wageCalcRate, value, () => WageCalcRate);}
+		}
+
+		bool visitingMaster;
+
+		public virtual bool VisitingMaster
+		{
+			get { return visitingMaster; }
+			set { SetField(ref visitingMaster, value, () => VisitingMaster);}
 		}
 
 		#endregion
@@ -348,6 +390,11 @@ namespace Vodovoz.Domain.Employees
 			}
 		}
 
+		public virtual double TimeCorrection(long timeValue)
+		{
+			return (double)timeValue / DriverSpeed;
+		}
+
 		#endregion
 
 		void ObservableDistricts_ElementAdded(object aList, int[] aIdx)
@@ -369,6 +416,18 @@ namespace Vodovoz.Domain.Employees
 		driver,
 		[Display (Name = "Экспедитор")]
 		forwarder
+	}
+
+	public enum WageCalculationType
+	{
+		[Display(Name = "Обычный")]
+		normal,
+		[Display(Name = "Процент от стоимости")]
+		percentage,
+		[Display(Name = "Фиксированная ставка за МЛ")]
+		fixedRoute,
+		[Display(Name = "Фиксированная ставка за день")]
+		fixedDay
 	}
 
 	public class EmployeeCategoryStringType : NHibernate.Type.EnumStringType

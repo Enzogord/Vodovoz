@@ -262,6 +262,8 @@ namespace Vodovoz
 
 		private global::Gtk.Button buttonWaitForPayment;
 
+		private global::Gtk.Button buttonCloseOrder;
+
 		private global::Gtk.Button buttonCancelOrder;
 
 		protected virtual void Build()
@@ -859,7 +861,6 @@ namespace Vodovoz
 			// Container child table3.Gtk.Table+TableChild
 			this.enumareRasonType = new global::Gamma.Widgets.yEnumComboBox();
 			this.enumareRasonType.Name = "enumareRasonType";
-			this.enumareRasonType.ItemsEnumName = "";
 			this.enumareRasonType.ShowSpecialStateAll = false;
 			this.enumareRasonType.ShowSpecialStateNot = false;
 			this.enumareRasonType.UseShortTitle = false;
@@ -875,7 +876,6 @@ namespace Vodovoz
 			// Container child table3.Gtk.Table+TableChild
 			this.enumDiverCallType = new global::Gamma.Widgets.yEnumComboBox();
 			this.enumDiverCallType.Name = "enumDiverCallType";
-			this.enumDiverCallType.ItemsEnumName = "";
 			this.enumDiverCallType.ShowSpecialStateAll = false;
 			this.enumDiverCallType.ShowSpecialStateNot = false;
 			this.enumDiverCallType.UseShortTitle = false;
@@ -1336,7 +1336,6 @@ namespace Vodovoz
 			this.enumAddRentButton.Name = "enumAddRentButton";
 			this.enumAddRentButton.UseUnderline = true;
 			this.enumAddRentButton.UseMarkup = false;
-			this.enumAddRentButton.ItemsEnumName = "";
 			this.enumAddRentButton.Label = global::Mono.Unix.Catalog.GetString("В аренду");
 			global::Gtk.Image w100 = new global::Gtk.Image();
 			w100.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-add", global::Gtk.IconSize.Menu);
@@ -1580,25 +1579,33 @@ namespace Vodovoz
 			global::Gtk.Box.BoxChild w131 = ((global::Gtk.Box.BoxChild)(this.hboxStatusButtons[this.buttonWaitForPayment]));
 			w131.Position = 1;
 			// Container child hboxStatusButtons.Gtk.Box+BoxChild
+			this.buttonCloseOrder = new global::Gtk.Button();
+			this.buttonCloseOrder.CanFocus = true;
+			this.buttonCloseOrder.Name = "buttonCloseOrder";
+			this.buttonCloseOrder.UseUnderline = true;
+			this.buttonCloseOrder.Label = global::Mono.Unix.Catalog.GetString("Закрыть заказ");
+			this.hboxStatusButtons.Add(this.buttonCloseOrder);
+			global::Gtk.Box.BoxChild w132 = ((global::Gtk.Box.BoxChild)(this.hboxStatusButtons[this.buttonCloseOrder]));
+			w132.Position = 2;
+			// Container child hboxStatusButtons.Gtk.Box+BoxChild
 			this.buttonCancelOrder = new global::Gtk.Button();
 			this.buttonCancelOrder.CanFocus = true;
 			this.buttonCancelOrder.Name = "buttonCancelOrder";
 			this.buttonCancelOrder.UseUnderline = true;
 			this.buttonCancelOrder.Label = global::Mono.Unix.Catalog.GetString("Отменить заказ");
-			global::Gtk.Image w132 = new global::Gtk.Image();
-			w132.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-cancel", global::Gtk.IconSize.Menu);
-			this.buttonCancelOrder.Image = w132;
+			global::Gtk.Image w133 = new global::Gtk.Image();
+			w133.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-cancel", global::Gtk.IconSize.Menu);
+			this.buttonCancelOrder.Image = w133;
 			this.hboxStatusButtons.Add(this.buttonCancelOrder);
-			global::Gtk.Box.BoxChild w133 = ((global::Gtk.Box.BoxChild)(this.hboxStatusButtons[this.buttonCancelOrder]));
-			w133.Position = 2;
+			global::Gtk.Box.BoxChild w134 = ((global::Gtk.Box.BoxChild)(this.hboxStatusButtons[this.buttonCancelOrder]));
+			w134.Position = 3;
 			this.vbox2.Add(this.hboxStatusButtons);
-			global::Gtk.Box.BoxChild w134 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hboxStatusButtons]));
-			w134.Position = 2;
-			w134.Expand = false;
-			w134.Fill = false;
+			global::Gtk.Box.BoxChild w135 = ((global::Gtk.Box.BoxChild)(this.vbox2[this.hboxStatusButtons]));
+			w135.Position = 2;
+			w135.Expand = false;
+			w135.Fill = false;
 			this.Add(this.vbox2);
-			if ((this.Child != null))
-			{
+			if((this.Child != null)) {
 				this.Child.ShowAll();
 			}
 			this.labelProxyInfo.Hide();
@@ -1631,6 +1638,7 @@ namespace Vodovoz
 			this.buttonPrintSelected.Clicked += new global::System.EventHandler(this.OnButtonPrintSelectedClicked);
 			this.buttonAccept.Clicked += new global::System.EventHandler(this.OnButtonAcceptClicked);
 			this.buttonWaitForPayment.Clicked += new global::System.EventHandler(this.OnButtonWaitForPaymentClicked);
+			this.buttonCloseOrder.Clicked += new global::System.EventHandler(this.OnButtonCloseOrderClicked);
 			this.buttonCancelOrder.Clicked += new global::System.EventHandler(this.OnButtonCancelOrderClicked);
 		}
 	}

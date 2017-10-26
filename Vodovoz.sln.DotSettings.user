@@ -1,0 +1,10 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="C:\Windows\Microsoft.NET\assembly\GAC_MSIL\gdk-sharp\v4.0_2.12.0.0__35e10195dab3c99f\gdk-sharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files (x86)\GtkSharp\2.12\lib\gtk-sharp-2.0\gtk-sharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Windows\Microsoft.NET\assembly\GAC_MSIL\atk-sharp\v4.0_2.12.0.0__35e10195dab3c99f\atk-sharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Windows\Microsoft.NET\assembly\GAC_MSIL\glib-sharp\v4.0_2.12.0.0__35e10195dab3c99f\glib-sharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files (x86)\GtkSharp\2.12\lib\gtk-sharp-2.0\gtk-dotnet.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files (x86)\GtkSharp\2.12\lib\gtk-sharp-2.0\glib-sharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Program Files (x86)\Mono\lib\gtk-sharp-2.0\atk-sharp.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

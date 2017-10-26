@@ -3,6 +3,7 @@ using QSOrmProject;
 using QSReport;
 using System.Collections.Generic;
 using Vodovoz.Domain.Logistic;
+using Vodovoz.Domain.Employees;
 
 namespace Vodovoz.Reports
 {
@@ -13,6 +14,7 @@ namespace Vodovoz.Reports
 			this.Build();
 			UoW = UnitOfWorkFactory.CreateWithoutRoot ();
 			yentryreferenceCar.SubjectType = typeof(Car);
+			yentryAuthor.ItemsQuery = Repository.EmployeeRepository.OfficeWorkersQuery();
 		}
 
 		#region IOrmDialog implementation
@@ -33,7 +35,7 @@ namespace Vodovoz.Reports
 
 		public string Title	{ 
 			get {
-				return "Отчет по бензину";
+				return "Отчет по выдаче топлива";
 			}
 		}
 
@@ -43,6 +45,9 @@ namespace Vodovoz.Reports
 		{ 
 			var parameters = new Dictionary<string, object>();
 
+			parameters.Add("start_date", dateperiodpicker.StartDateOrNull);
+			parameters.Add("end_date", dateperiodpicker.EndDate.AddDays(1).AddTicks(-1));
+
 			if(yentryreferenceCar.Subject != null){
 				parameters.Add("car_id", (yentryreferenceCar.Subject as Car)?.Id);
 				parameters.Add("driver_id", (yentryreferenceCar.Subject as Car)?.IsCompanyHavings == true
@@ -51,10 +56,14 @@ namespace Vodovoz.Reports
 			else {
 				parameters.Add("car_id", -1);
 				parameters.Add("driver_id", -1);
-			}
+				parameters.Add("author", yentryAuthor.Subject == null ? -1 : (yentryAuthor.Subject as Employee).Id);
 
-			parameters.Add("start_date", dateperiodpicker.StartDateOrNull);
-			parameters.Add("end_date", dateperiodpicker.EndDate.AddDays(1).AddTicks(-1));
+				return new ReportInfo {
+					Identifier = "Logistic.FuelReportSummary",
+					UseUserVariables = true,
+					Parameters = parameters
+				};
+			}
 
 			return new ReportInfo
 			{
@@ -85,6 +94,21 @@ namespace Vodovoz.Reports
 			CanRun();
 		}
 
+		protected void OnYentryreferenceCarChanged(object sender, EventArgs e)
+		{
+			if(yentryreferenceCar.Subject != null)
+			{
+				yentryAuthor.Subject = null;
+			}
+		}
+
+		protected void OnYentryAuthorChanged(object sender, EventArgs e)
+		{
+			if(yentryAuthor.Subject != null)
+			{
+				yentryreferenceCar.Subject = null;
+			}
+		}
 	}
 }
 

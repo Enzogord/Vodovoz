@@ -152,6 +152,13 @@ namespace Vodovoz
 				MessageDialogWorks.RunErrorDialog("Ваш пользователь не привязан к действующему сотруднику, Вы не можете выдавать денежные средства, так как некого указывать в качестве кассира.");
 				return false;
 			}
+
+			if(Entity.Author == null) {
+				Entity.Author = cashier;
+			}
+			Entity.LastEditor = cashier;
+			Entity.LastEditDate = DateTime.Now;
+
 			if (Entity.FuelCashExpense != null)
 			{
 				Entity.FuelCashExpense.Casher = cashier;
@@ -160,6 +167,12 @@ namespace Vodovoz
 			var valid = new QSValidator<FuelDocument> (UoWGeneric.Root);
 			if (valid.RunDlgIfNotValid ((Gtk.Window)this.Toplevel))
 				return false;
+
+			var routeList = UoW.GetById<RouteList>(RouteListClosing.Id);
+			if(routeList.FuelGivedDocument == null) {
+				routeList.FuelGivedDocument = UoWGeneric.Root;
+				RouteListClosing.FuelGivedDocument = UoWGeneric.Root;
+			}
 
 			logger.Info ("Сохраняем топливный документ...");
 			UoWGeneric.Save();

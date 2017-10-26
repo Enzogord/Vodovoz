@@ -240,10 +240,6 @@ namespace Vodovoz
 			this.referenceCar = new global::Gamma.Widgets.yEntryReference();
 			this.referenceCar.Events = ((global::Gdk.EventMask)(256));
 			this.referenceCar.Name = "referenceCar";
-			this.referenceCar.DisplayFields = new string[] {
-					"Model",
-					"RegistrationNumber"};
-			this.referenceCar.DisplayFormatString = "{0} {1}";
 			this.dataRouteList.Add(this.referenceCar);
 			global::Gtk.Table.TableChild w17 = ((global::Gtk.Table.TableChild)(this.dataRouteList[this.referenceCar]));
 			w17.TopAttach = ((uint)(2));
@@ -256,7 +252,6 @@ namespace Vodovoz
 			this.referenceDriver = new global::Gamma.Widgets.yEntryReference();
 			this.referenceDriver.Events = ((global::Gdk.EventMask)(256));
 			this.referenceDriver.Name = "referenceDriver";
-			this.referenceDriver.DisplayFormatString = "";
 			this.dataRouteList.Add(this.referenceDriver);
 			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.dataRouteList[this.referenceDriver]));
 			w18.TopAttach = ((uint)(3));
@@ -311,6 +306,7 @@ namespace Vodovoz
 			this.createroutelistitemsview1.HeightRequest = 150;
 			this.createroutelistitemsview1.Events = ((global::Gdk.EventMask)(256));
 			this.createroutelistitemsview1.Name = "createroutelistitemsview1";
+			this.createroutelistitemsview1.DisableColumnsUpdate = false;
 			this.vbox1.Add(this.createroutelistitemsview1);
 			global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.createroutelistitemsview1]));
 			w23.Position = 1;
@@ -355,7 +351,8 @@ namespace Vodovoz
 			w28.Expand = false;
 			w28.Fill = false;
 			this.Add(this.vbox1);
-			if((this.Child != null)) {
+			if ((this.Child != null))
+			{
 				this.Child.ShowAll();
 			}
 			this.Hide();

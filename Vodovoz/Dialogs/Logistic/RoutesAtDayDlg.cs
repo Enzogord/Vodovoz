@@ -39,11 +39,9 @@ namespace Vodovoz
 		IList<RouteList> routesAtDay;
 		IList<AtWorkDriver> driversAtDay;
 		IList<AtWorkForwarder> forwardersAtDay;
+		IList<LogisticsArea> logisticanDistricts;
 		RouteOptimizer optimizer = new RouteOptimizer();
-		RouteGeometrySputnikCalculator distanceCalculator = new RouteGeometrySputnikCalculator();
-
-		//FIXME Временно, задаем из кода, в идеале потом позволить переключать режим пользователю.
-		bool UseSputnikDistance = true;
+		RouteGeometryCalculator distanceCalculator = new RouteGeometryCalculator(DistanceProvider.Osrm);
 
 		GenericObservableList<AtWorkDriver> observableDriversAtDay;
 		GenericObservableList<AtWorkForwarder> observableForwardersAtDay;
@@ -152,7 +150,6 @@ namespace Vodovoz
 			ytreeRoutes.HasTooltip = true;
 			ytreeRoutes.QueryTooltip += YtreeRoutes_QueryTooltip;;
 			ytreeRoutes.Selection.Changed += YtreeRoutes_Selection_Changed;
-			distanceCalculator.RouteCalculeted += DistanceCalculator_RouteCalculeted;
 
 			ytreeviewOnDayDrivers.ColumnsConfig = FluentColumnsConfig<AtWorkDriver>.Create()
 				.AddColumn("Водитель").AddTextRenderer(x => x.Employee.ShortName)
@@ -342,40 +339,16 @@ namespace Vodovoz
 				if(rl == null)
 					rl = (row as RouteListItem).RouteList;
 
-				List<PointLatLng> points;
-				if(UseSputnikDistance)
+				MapDrawingHelper.DrawRoute(routeOverlay, rl, distanceCalculator);
+
+				//Если выбран адрес, центруем на него карту.
+				var rli = row as RouteListItem;
+				if(rli != null)
 				{
-					var address = GenerateHashPiontsOfRoute(rl);
-					MainClass.MainWin.ProgressStart(address.Count);
-					points = distanceCalculator.GetGeometryOfRoute(address.ToArray(), (val, max) => MainClass.MainWin.ProgressUpdate(val));
-					MainClass.MainWin.ProgressClose();
+					gmapWidget.Position = rli.Order.DeliveryPoint.GmapPoint;
 				}
-				else
-				{
-					points = new List<PointLatLng>();
-					points.Add(DistanceCalculator.BasePoint);
-					points.AddRange(rl.Addresses.Select(x => x.Order.DeliveryPoint.GmapPoint));
-					points.Add(DistanceCalculator.BasePoint);
-				}
-
-				var route = new GMapRoute(points, rl.Id.ToString());
-
-				route.Stroke = new System.Drawing.Pen(System.Drawing.Color.Blue);
-				route.Stroke.Width = 2;
-				route.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-
-				routeOverlay.Routes.Add(route);
 			}
 			logger.Info("Ok");
-		}
-
-		private List<long> GenerateHashPiontsOfRoute(RouteList rl)
-		{
-			var result = new List<long>();
-			result.Add(RouteGeometrySputnikCalculator.BaseHash);
-			result.AddRange(rl.Addresses.Where(x => x.Order.DeliveryPoint.СoordinatesExist).Select(x => CachedDistance.GetHash(x.Order.DeliveryPoint)));
-			result.Add(RouteGeometrySputnikCalculator.BaseHash);
-			return result;
 		}
 
 		void YtreeviewDrivers_Selection_Changed(object sender, EventArgs e)
@@ -522,14 +495,13 @@ namespace Vodovoz
 			if(rl != null)
 			{
 				var proposed = optimizer.ProposedRoutes.FirstOrDefault(x => x.RealRoute == rl);
-				var distanceMeters = distanceCalculator.GetRouteDistanceBackground(GenerateHashPiontsOfRoute(rl).ToArray());
-				if (distanceMeters == -1)
-					return "⌛";
+				if (rl.PlanedDistance == null)
+					return String.Empty;
 				if(proposed == null)
-					return String.Format("{0:N1}км", (double)distanceMeters / 1000);
+					return String.Format("{0:N1}км", rl.PlanedDistance);
 				else
 					return String.Format("{0:N1}км ({1:N})", 
-					                     (double)distanceMeters / 1000,
+					                     rl.PlanedDistance,
 					                     (double)proposed.RouteCost / 1000);
 			}
 
@@ -643,7 +615,18 @@ namespace Vodovoz
 				.Fetch (x => x.OrderItems).Eager
 				.Future ();
 
-			ordersAtDay = ordersQuery.Where (x => x.DeliverySchedule.To <= ytimeToDelivery.Time).ToList ();
+			var withoutTime = ordersQuery.Where(x => x.DeliverySchedule == null).ToList();
+			var withoutLocation = ordersQuery.Where(x => x.DeliveryPoint == null || !x.DeliveryPoint.СoordinatesExist).ToList();
+			if(withoutTime.Count > 0 || withoutLocation.Count > 0)
+				MessageDialogWorks.RunWarningDialog("Не все заказы были загружены!" +
+				                                    (withoutTime.Count > 0 ? ("\n* У заказов отсутсвует время доставки: " + String.Join(", ", withoutTime.Select(x => x.Id.ToString()))) : "") +
+				                                    (withoutLocation.Count > 0 ? ("\n* У заказов отсутствуют координаты: " + String.Join(", ", withoutLocation.Select(x => x.Id.ToString()))) : "")
+												   );
+
+			ordersAtDay = ordersQuery.Where (x => x.DeliverySchedule != null)
+			                         .Where(x => x.DeliverySchedule.To <= ytimeToDelivery.Time)
+			                         .Where(x => x.DeliveryPoint != null)
+			                         .ToList ();
 
 			logger.Info("Загружаем МЛ на {0:d}...", ydateForRoutes.Date);
 			MainClass.MainWin.ProgressAdd();
@@ -727,10 +710,12 @@ namespace Vodovoz
 
 					var addressMarker = new PointMarker(new PointLatLng((double)order.DeliveryPoint.Latitude, (double)order.DeliveryPoint.Longitude), type);
 					addressMarker.Tag = order;
-					addressMarker.ToolTipText = String.Format("{0}\nБутылей: {1}, Время доставки: {2}",
-					order.DeliveryPoint.ShortAddress,
-					order.TotalDeliveredBottles,
-					order.DeliverySchedule?.Name ?? "Не назначено");
+					addressMarker.ToolTipText = String.Format("{0}\nБутылей: {1}, Время доставки: {2}\nРайон: {3}",
+						order.DeliveryPoint.ShortAddress,
+						order.TotalDeliveredBottles,
+						order.DeliverySchedule?.Name ?? "Не назначено",
+						logisticanDistricts?.FirstOrDefault(x => x.Geometry.Contains(order.DeliveryPoint.NetTopologyPoint))?.Name
+					                                         );
 
 					var identicalPoint= addressesOverlay.Markers.Count(g => g.Position.Lat == (double)order.DeliveryPoint.Latitude && g.Position.Lng == (double)order.DeliveryPoint.Longitude);
 					var pointShift = 5;
@@ -883,6 +868,7 @@ namespace Vodovoz
 					recalculeteLoading = true;
 			}
 			route.RecalculatePlanTime(distanceCalculator);
+			route.RecalculatePlanedDistance(distanceCalculator);
 			uow.Save (route);
 			logger.Info ("В МЛ №{0} добавлено {1} адресов.", route.Id, selectedOrders.Count);
 			if(recalculeteLoading)
@@ -939,6 +925,7 @@ namespace Vodovoz
 			uow.Save (route);
 			UpdateAddressesOnMap ();
 			route.RecalculatePlanTime(distanceCalculator);
+			route.RecalculatePlanedDistance(distanceCalculator);
 			RoutesWasUpdated ();
 		}
 
@@ -989,6 +976,7 @@ namespace Vodovoz
 				var newRoute = optimizer.RebuidOneRoute(route);
 				if(newRoute != null) {
 					newRoute.UpdateAddressOrderInRealRoute(route);
+					route.RecalculatePlanedDistance(distanceCalculator);
 					var noPlan = route.Addresses.Count(x => !x.PlanTimeStart.HasValue);
 					if(noPlan > 0)
 						warnings.Add($"Для маршрута {route.Id} незапланировано {noPlan} адресов.");
@@ -1059,8 +1047,8 @@ namespace Vodovoz
 		{
 			logger.Info("Загружаем районы...");
 			districtsOverlay.Clear();
-			var districts = uow.GetAll<LogisticsArea>();
-			foreach(var district in districts)
+			logisticanDistricts = uow.GetAll<LogisticsArea>().ToList();
+			foreach(var district in logisticanDistricts)
 			{
 				if(district.Geometry == null)
 					continue;
@@ -1248,12 +1236,6 @@ namespace Vodovoz
 			driver.Car = car;
 		}
 
-		void DistanceCalculator_RouteCalculeted(object sender, EventArgs e)
-		{
-			ytreeRoutes.ColumnsAutosize();
-			ytreeRoutes.QueueDraw();
-		}
-
 		void OnLoadTimeEdited(object o, Gtk.EditedArgs args)
 		{
 			var routeList = (RouteList)ytreeRoutes.YTreeModel.NodeAtPath(new Gtk.TreePath(args.Path));
@@ -1287,6 +1269,7 @@ namespace Vodovoz
 			var newRoute = optimizer.RebuidOneRoute(route);
 			if(newRoute != null) {
 				newRoute.UpdateAddressOrderInRealRoute(route);
+				route.RecalculatePlanedDistance(distanceCalculator);
 			} else
 				MessageDialogWorks.RunErrorDialog("Решение не найдено.");
 		}

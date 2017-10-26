@@ -30,4 +30,3 @@ namespace Vodovoz.Repository.Chats
 		}
 	}
 }
-

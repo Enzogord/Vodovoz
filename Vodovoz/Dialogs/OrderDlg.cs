@@ -23,6 +23,7 @@ using Vodovoz.Panel;
 using Vodovoz.Repository;
 using QSDocTemplates;
 using Vodovoz.JournalFilters;
+using Vodovoz.Domain.Operations;
 
 namespace Vodovoz
 {
@@ -301,6 +302,8 @@ namespace Vodovoz
 
 			if(UoWGeneric.Root.OrderStatus != OrderStatus.NewOrder)
 				IsEditable();
+
+			ButtonCloseOrderSensitivity();
 		}
 
 		void Entity_UpdateClientCanChange (object aList, int[] aIdx)
@@ -361,6 +364,7 @@ namespace Vodovoz
 			} */
 
 			logger.Info("Ok.");
+			ButtonCloseOrderSensitivity();
 			return true;
 		}
 
@@ -1202,6 +1206,47 @@ namespace Vodovoz
 			}
 		}
 
+		protected void OnButtonCloseOrderClicked(object sender, EventArgs e)
+		{
+			if(!MessageDialogWorks.RunQuestionDialog("Вы уверены, что хотите закрыть заказ?"))
+			{
+				return;
+			}
 
+			foreach(OrderItem item in Entity.OrderItems)
+			{
+				item.ActualCount = item.Count;
+			}
+
+			int amountDelivered = Entity.OrderItems
+					.Where(item => item.Nomenclature.Category == NomenclatureCategory.water)
+					.Sum(item => item.ActualCount);
+
+			if(Entity.BottlesMovementOperation == null)
+			{
+				if(amountDelivered != 0 || (Entity.ReturnedTare != 0 && Entity.ReturnedTare != null)) {
+					var bottlesMovementOperation = new BottlesMovementOperation {
+						OperationTime = Entity.DeliveryDate.Value.Date.AddHours(23).AddMinutes(59),
+						Order = Entity,
+						Delivered = amountDelivered,
+						Returned = Entity.ReturnedTare.GetValueOrDefault(),
+						Counterparty = Entity.Client,
+						DeliveryPoint = Entity.DeliveryPoint
+					};
+					UoW.Save(bottlesMovementOperation);
+					Entity.BottlesMovementOperation = bottlesMovementOperation;
+				}
+			}
+
+			Entity.ChangeStatus(OrderStatus.Closed);
+			ButtonCloseOrderSensitivity();
+		}
+
+		void ButtonCloseOrderSensitivity()
+		{
+			buttonCloseOrder.Sensitive = QSMain.User.Permissions["can_close_orders"] 
+											&& Entity.OrderStatus >= OrderStatus.Accepted 
+											&& Entity.OrderStatus != OrderStatus.Closed;
+		}
 	}
 }

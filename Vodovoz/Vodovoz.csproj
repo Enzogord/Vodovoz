@@ -92,7 +92,7 @@
       <HintPath>..\lib\Google.OrTools\$(TargetOS)\Google.OrTools.dll</HintPath>
     </Reference>
     <Reference Condition=" '$(TargetOS)' == 'Win' " Include="Google.OrTools">
-      <HintPath>..\lib\Google.OrTools\$(TargetOS)\Google.OrTools.x86.dll</HintPath>
+      <HintPath>..\lib\Google.OrTools\$(TargetOS)\Google.OrTools.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\lib\Google.OrTools\$(TargetOS)\Google.Protobuf.dll</HintPath>
@@ -681,6 +681,13 @@
     <Compile Include="Dialogs\Logistic\DeliveryDayScheduleDlg.cs" />
     <Compile Include="gtk-gui\Vodovoz.Dialogs.Logistic.DeliveryDayScheduleDlg.cs" />
     <Compile Include="Additions\Logistic\RouteOptimization\PossibleTrip.cs" />
+	<Compile Include="ReportsParameters\Logistic\ShipmentReport.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Logistic.ShipmentReport.cs" />
+    <Compile Include="ReportsParameters\Logistic\BottlesMovementReport.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Logistic.BottlesMovementReport.cs" />
+    <Compile Include="ReportsParameters\MastersVisitReport.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.MastersVisitReport.cs" />
+    <Compile Include="Additions\Logistic\MapDrawingHelper.cs" />
     <Compile Include="Dialogs\DialogueScriptDlg.cs" />
     <Compile Include="gtk-gui\Vodovoz.Dialogs.DialogueScriptDlg.cs" />
     <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueBaseWidget.cs" />
@@ -870,6 +877,7 @@
     <Folder Include="ServiceDialogs\Chat\" />
     <Folder Include="ServiceDialogs\Database\" />
     <Folder Include="Additions\Logistic\RouteOptimization\" />
+    <Folder Include="Reports\ServiceCenter\" />
     <Folder Include="ViewWidgets\DialogueScriptWidgets\" />
   </ItemGroup>
   <ItemGroup>
@@ -1097,12 +1105,31 @@
     <None Include="Reports\Logistic\AddressesByDailyNumber.rdl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Reports\Logistic\FuelReportSummary.rdl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Logistic\ShipmentReport.rdl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Logistic\BottlesMovementReport.rdl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\ServiceCenter\MastersVisitReport.rdl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Logistic\RouteMap.rdl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Additions\Logistic\RouteOptimization\README.md" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
         <Policies>
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild" />
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild">
+            <inheritsSet />
+            <inheritsScope />
+          </DotNetNamingPolicy>
         </Policies>
         <Deployment.LinuxDeployData generateScript="False" />
       </Properties>

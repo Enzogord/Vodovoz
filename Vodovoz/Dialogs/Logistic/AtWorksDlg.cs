@@ -84,6 +84,7 @@ namespace Vodovoz.Dialogs.Logistic
 			ytreeviewAtWorkDrivers.ColumnsConfig = FluentColumnsConfig<AtWorkDriver>.Create()
 				.AddColumn("Приоритет").AddNumericRenderer(x => x.PriorityAtDay).Editing(new Gtk.Adjustment(6, 1, 10,1,1,1))
 				.AddColumn("Водитель").AddTextRenderer(x => x.Employee.ShortName)
+				.AddColumn("Скор.").AddTextRenderer(x => x.Employee.DriverSpeed.ToString("P0"))
 				.AddColumn("График работы").AddComboRenderer(x => x.DaySchedule)
 					.SetDisplayFunc(x => x.Name)
 					.FillItems(uow.GetAll<DeliveryDaySchedule>().ToList()).Editing()
@@ -264,11 +265,14 @@ namespace Vodovoz.Dialogs.Logistic
 			if (ytreeviewAtWorkDrivers.Selection.CountSelectedRows() != 1 && districtpriorityview1.Visible)
 				districtpriorityview1.Visible = false;
 
+			buttonOpenCar.Sensitive = false;
+
 			if(ytreeviewAtWorkDrivers.Selection.CountSelectedRows() == 1)
 			{
 				var selected = ytreeviewAtWorkDrivers.GetSelectedObjects<AtWorkDriver>();
 				districtpriorityview1.ListParent = selected[0];
 				districtpriorityview1.Districts = selected[0].ObservableDistricts;
+				buttonOpenCar.Sensitive = selected[0].Car != null;
 			}
 		}
 		
@@ -379,6 +383,14 @@ namespace Vodovoz.Dialogs.Logistic
 			}
 
 			MessageDialogWorks.RunInfoDialog("Готово.");
+		}
+
+		protected void OnButtonOpenCarClicked(object sender, EventArgs e)
+		{
+			var selected = ytreeviewAtWorkDrivers.GetSelectedObjects<AtWorkDriver>();
+			TabParent.OpenTab(OrmMain.GenerateDialogHashName<Car>(selected[0].Car.Id),
+			                  () => new CarsDlg(selected[0].Car)
+			                 );
 		}
 	}
 }

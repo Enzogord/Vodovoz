@@ -41,6 +41,8 @@ namespace Vodovoz
 
 		private string newAddressString = "НОВЫЙ АДРЕС", orderIncreaseString = "УВЕЛИЧЕНИЕ ЗАКАЗА", firstOrderString = "ПЕРВЫЙ ЗАКАЗ";
 
+		private ChangedItem ordersToClose = new ChangedItem();
+
 		#if SHORT
 		List<string> ExcludeNomenclatures = new List<string> {
 			 
@@ -866,6 +868,12 @@ namespace Vodovoz
 
 		protected void OnButtonSaveClicked (object sender, EventArgs e)
 		{
+			if(ordersToClose.Fields != null && ordersToClose.Fields.Count > 100)
+			{
+				MessageDialogWorks.RunWarningDialog("<b>ОШИБКА ПРИ ПОПЫТКЕ ЗАГРУЗИТЬ ВЫГРУЗКУ!\nПЕРЕДАЙТЕ ФАЙЛ ВЫГРУЗКИ В IT-ОТДЕЛ!</b>");
+				return;
+			}
+
 			progressbar.Text = "Записываем данные в базу...";
 			logger.Info("Записываем данные в базу...");
 			UoW.Commit ();
@@ -1029,9 +1037,10 @@ namespace Vodovoz
 					var change = ChangedItem.CompareAndChange(exist, loaded);
 					if (change != null) {
 						if(exist.OrderStatus > OrderStatus.Accepted) {
-							MessageDialogWorks.RunErrorDialog(
-								$"Заказ с кодом {exist.Code1c} уже загружен и имеет статус выше \"Подтвержден\".\n" +
-								"Данный заказ НЕ будет повторно загружен или изменен");
+							// Закомментил на случай, если вдруг понадобится.
+						//	MessageDialogWorks.RunErrorDialog(
+						//		$"Заказ с кодом {exist.Code1c} уже загружен и имеет статус выше \"Подтвержден\".\n" +
+						//		"Данный заказ НЕ будет повторно загружен или изменен");
 
 							change.Title = $"Заказ с кодом {exist.Code1c} уже загружен и имеет статус выше подтвержденного";
 							Changes.Add(change);
@@ -1041,6 +1050,15 @@ namespace Vodovoz
 
 						ChangedOrders++;
 						Changes.Add(change);
+						UoW.Save(exist);
+					}
+
+					if(exist.OrderStatus == OrderStatus.Canceled) {
+						if(exist.DeliverySchedule != null && exist.DeliveryPoint != null) {
+							exist.OrderStatus = OrderStatus.Accepted;
+						} else {
+							exist.OrderStatus = OrderStatus.NewOrder;
+						}
 						UoW.Save(exist);
 					}
 				}
@@ -1061,6 +1079,7 @@ namespace Vodovoz
 			if (notLoaded != null)
 			{
 				Changes.Add(notLoaded);
+				ordersToClose = notLoaded;
 				labelLostOrders.LabelProp = notLoaded.Fields.Count.ToString();
 			}
 				
