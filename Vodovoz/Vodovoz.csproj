@@ -682,11 +682,8 @@
     <Compile Include="gtk-gui\Vodovoz.Dialogs.Logistic.DeliveryDayScheduleDlg.cs" />
     <Compile Include="Additions\Logistic\RouteOptimization\PossibleTrip.cs" />
 	<Compile Include="ReportsParameters\Logistic\ShipmentReport.cs" />
-    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Logistic.ShipmentReport.cs" />
     <Compile Include="ReportsParameters\Logistic\BottlesMovementReport.cs" />
-    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Logistic.BottlesMovementReport.cs" />
     <Compile Include="ReportsParameters\MastersVisitReport.cs" />
-    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.MastersVisitReport.cs" />
     <Compile Include="Additions\Logistic\MapDrawingHelper.cs" />
     <Compile Include="Dialogs\DialogueScriptDlg.cs" />
     <Compile Include="gtk-gui\Vodovoz.Dialogs.DialogueScriptDlg.cs" />
@@ -731,6 +728,9 @@
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueSanitizationWidget.cs" />
     <Compile Include="ViewWidgets\DialogueScriptWidgets\DialogueWelcomeWidget.cs" />
     <Compile Include="gtk-gui\Vodovoz.ViewWidgets.DialogueScriptWidgets.DialogueWelcomeWidget.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.MastersVisitReport.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Logistic.BottlesMovementReport.cs" />
+    <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Logistic.ShipmentReport.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -1126,10 +1126,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild">
-            <inheritsSet />
-            <inheritsScope />
-          </DotNetNamingPolicy>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild" />
         </Policies>
         <Deployment.LinuxDeployData generateScript="False" />
       </Properties>
