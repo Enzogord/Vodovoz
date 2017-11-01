@@ -24,8 +24,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		ScriptTreeObject result = null,
 						 dependencyObject;
 		bool nextElementSet = true,         // Устанавливает, выбран ли следующий элемент. Становится false, если есть саб-элементы.
-			 customActionDone = true,    // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
-			 widgetDone = false;         // Устанавливает, закончена ли работа с виджетом.
+			 customActionDone = true,       // Устанавливает, выполнено ли действие в саб-виджете (специфические функции вроде выбора контрагента и т.д.)
+			 widgetDone = false;            // Устанавливает, закончена ли работа с виджетом.
 
 		Gtk.Label  label;
 		Gtk.Label  dialogue;
@@ -46,6 +46,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.ste = ste;
 			this.dependencyObject = dependencyObject;
 			this.Configure();
+
+
 		}
 
 		public void Configure()
@@ -58,7 +60,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			label = new Gtk.Label(ste.Label);
 			label.Show();
 
-			dialogue = new Gtk.Label(ste.Text.Replace("!+", employeeName));
+			//dialogue = new Gtk.Label(ste.Text.Replace("!+", employeeName));
+			dialogue = new Gtk.Label(ste.Text);
 			dialogue.Show();
 
 			buttonNext = new Gtk.Button();
@@ -191,6 +194,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.next = nextElementQuery;
 			nextElementSet = true;
 		}
+
 		//Обработчик кнопки перехода
 		void OnNextButtonPressed(object sender, EventArgs e)
 		{
@@ -225,14 +229,22 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			}
 
 			customActionDone = true;
-			(sender as Gtk.Widget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
+			//(sender as Gtk.Widget).Sensitive = false; // Запрещает редактировать данные в саб-виджете. 
 			SetButtonNextParameters();
 		}
 
+		//TODO переписать на нормальный вывод текста
+
+		/// <summary>
+		/// Коректируем текст, если дергаем событие из виджета
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">коректирующий текст.</param>
 		void OnTextCorrectionsPresent(object sender, TextCorrectionsPresentEventArgs e)
 		{
 			for(int i = 0; i < e.Corrections.Length; i++) {
-				label.Text = label.Text.Replace("#" + i.ToString() + "#", e.Corrections[i]);
+				//label.Text = label.Text.Replace("#" + i.ToString() + "#", e.Corrections[i]);
+				dialogue.Text = dialogue.Text.Replace("!+", e.Corrections[i]);
 			}
 		}
 
@@ -282,6 +294,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 					return new DialogueEquipmentWidget(UoW);
 				case DialogueScriptWidget.additional:
 					return new DialogueAdditionalWidget(UoW);
+				
+				case DialogueScriptWidget.sanitization:
+					return new DialogueSanitizationWidget(UoW);
 
 				case DialogueScriptWidget.changeandstamp:
 					return new DialogueChangeAndStampWidget(UoW);
@@ -291,6 +306,10 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			}
 		}
 
+		/// <summary>
+		/// Обновляем зависимости у сабвиджетов.
+		/// </summary>
+		/// <param name="dependencyObject">Dependency object.</param>
 		public void RefreshDependency(ScriptTreeObject dependencyObject)
 		{
 			this.dependencyObject = dependencyObject;

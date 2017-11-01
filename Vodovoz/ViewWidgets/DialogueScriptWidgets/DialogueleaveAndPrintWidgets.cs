@@ -9,6 +9,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class DialogueleaveAndPrintWidgets : Gtk.Bin, IDialogueWidget
 	{
+		string dependencyString;
 		DeliveryPoint resultDeliveryPoint;
 		Counterparty dependencyCounterparty = new Counterparty();
 		DateSchedule resultDateSchedule = new DateSchedule();
@@ -26,7 +27,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		public void RefreshDependency(ScriptTreeObject ste)
 		{
 			var dependency = GetDependency(ste);
-			labelDate.LabelProp = dependency.Date.ToString();
+			//labelDate.LabelProp = dependency.Date.ToString();
+			dependencyString = dependency.Date.ToString();
 		}
 
 		protected void OnButtonPrintClicked(object sender, EventArgs e)
@@ -67,6 +69,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		}
 
+		void CorrectText()
+		{
+			string[] corrections = { dependencyString };
+			this.TextCorrectionsPresent?.Invoke(this, new TextCorrectionsPresentEventArgs(corrections));
+		}
+
 		public void SendResult()
 		{
 			if(resultDeliveryPoint == null) {
@@ -86,7 +94,6 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		//	//if(referenceDeliveryPoint.GetSubject<DeliveryPoint>() == resultDeliveryPoint) {
 		//	//	return;
 		//	//}
-
 		//	//resultDeliveryPoint = referenceDeliveryPoint.GetSubject<DeliveryPoint>();
 		//	SendResult();
 		//}

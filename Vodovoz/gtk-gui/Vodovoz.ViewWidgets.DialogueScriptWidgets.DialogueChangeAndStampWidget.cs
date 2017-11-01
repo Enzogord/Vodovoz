@@ -10,6 +10,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		private global::Gtk.Label label;
 
+		private global::Gtk.CheckButton checkChange;
+
+		private global::Gtk.HBox hbox1;
+
+		private global::Gtk.SpinButton spinbuttonChange;
+
 		protected virtual void Build()
 		{
 			global::Stetic.Gui.Initialize(this);
@@ -30,17 +36,50 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.hbox2.Add(this.label);
 			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.label]));
 			w1.Position = 0;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.checkChange = new global::Gtk.CheckButton();
+			this.checkChange.CanFocus = true;
+			this.checkChange.Name = "checkChange";
+			this.checkChange.Label = "";
+			this.checkChange.DrawIndicator = true;
+			this.checkChange.UseUnderline = true;
+			this.hbox2.Add(this.checkChange);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.checkChange]));
+			w2.Position = 2;
 			this.vbox3.Add(this.hbox2);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox2]));
-			w2.Position = 0;
-			w2.Expand = false;
-			w2.Fill = false;
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox2]));
+			w3.Position = 0;
+			w3.Expand = false;
+			w3.Fill = false;
+			// Container child vbox3.Gtk.Box+BoxChild
+			this.hbox1 = new global::Gtk.HBox();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.spinbuttonChange = new global::Gtk.SpinButton(0D, 100D, 1D);
+			this.spinbuttonChange.CanFocus = true;
+			this.spinbuttonChange.Name = "spinbuttonChange";
+			this.spinbuttonChange.Adjustment.PageIncrement = 10D;
+			this.spinbuttonChange.ClimbRate = 1D;
+			this.spinbuttonChange.Numeric = true;
+			this.hbox1.Add(this.spinbuttonChange);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.spinbuttonChange]));
+			w4.Position = 0;
+			w4.Expand = false;
+			this.vbox3.Add(this.hbox1);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.hbox1]));
+			w5.Position = 1;
+			w5.Expand = false;
+			w5.Fill = false;
 			this.Add(this.vbox3);
 			if ((this.Child != null))
 			{
 				this.Child.ShowAll();
 			}
+			this.spinbuttonChange.Hide();
 			this.Hide();
+			this.checkChange.Toggled += new global::System.EventHandler(this.OnCheckChangeToggled);
+			this.spinbuttonChange.Changed += new global::System.EventHandler(this.OnSpinbuttonChangeChanged);
 		}
 	}
 }

@@ -8,6 +8,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class DialogueWelcomeWidget : Gtk.Bin, IDialogueWidget
 	{
+		string correctionString;
 		string resultString;
 		IUnitOfWork UoW;
 
@@ -18,12 +19,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			this.Build();
 			this.UoW = UoW;
+			Configure();
 		}
 
 		public void Configure()
 		{
-			var employeeVar = EmployeeRepository.ActiveEmployeeOrderedQuery();
-			label1.LabelProp = employeeVar.ToString();
+			
 		}
 
 		public void SendResult()
@@ -35,14 +36,16 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			this.SubWidgetDone(this, new SubWidgetDoneEventArgs(result));
 		}
 
-		protected void OnEntryTextActivated(object sender, EventArgs e)
-		{
- 
-		}
-
 		public void RefreshDependency(ScriptTreeObject ste)
 		{
+			correctionString = EmployeeRepository.GetEmployeeForCurrentUser(UoW).Name;
+			CorrectText();
+		}
 
+		public void CorrectText()
+		{
+			string[] corrections = { correctionString };
+			this.TextCorrectionsPresent?.Invoke(this, new TextCorrectionsPresentEventArgs(corrections));
 		}
 	}
 }

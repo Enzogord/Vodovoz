@@ -55,8 +55,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			if(dependencyObject != null && dependencyObject.ResultObject is DeliveryPoint)
 			{
-				var dependency = dependencyObject.ResultObject as DeliveryPoint;
-				return dependency;
+				return dependencyObject.ResultObject as DeliveryPoint;
 			}
 
 			return null;

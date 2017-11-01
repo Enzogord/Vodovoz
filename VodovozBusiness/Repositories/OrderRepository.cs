@@ -147,6 +147,31 @@ namespace Vodovoz.Repository
 
 			return 0;
 		}
+
+		/// <summary>
+		/// Получить самый последний заказ с водой в номенклатуре.
+		/// </summary>
+		/// <returns>Самый последний заказ с водой в номенклатуре, если такого нет - null.</returns>
+		/// <param name="UoW">IUnitOfWork.</param>
+		/// <param name="deliveryPoint">Точка доставки.</param>
+		public static VodovozOrder GetLatestSanitizationForDeliveryPoint(IUnitOfWork UoW, DeliveryPoint deliveryPoint)
+		{
+			VodovozOrder orderAlias = null;
+			var queryResult = UoW.Session.QueryOver<VodovozOrder>(() => orderAlias)
+								 .Where(() => orderAlias.DeliveryPoint.Id == deliveryPoint.Id)
+								 .OrderBy(() => orderAlias.Id).Desc
+								 .List();
+
+			foreach(VodovozOrder order in queryResult) {
+				foreach(OrderItem item in order.OrderItems) {
+					if(item.Nomenclature.Category == NomenclatureCategory.service) {
+						return order;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
 }
 

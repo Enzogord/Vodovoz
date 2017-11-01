@@ -22,7 +22,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		Order newOrder;
 		List<OrderItem> newOrderList = new List<OrderItem>();
 		DeliveryPoint dependencyDeliveryPoint = new DeliveryPoint();
- 
+		List<OrderItemWithSelect> resultFreeRentItems;
+		List<OrderItemWithSelect> resultPaidRentItems;
+
 		public event EventHandler<SubWidgetDoneEventArgs> SubWidgetDone;
 		public event EventHandler<TextCorrectionsPresentEventArgs> TextCorrectionsPresent;
 
@@ -35,7 +37,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		public void Configure()
 		{
-			treeItems.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
+			treeEquipmentItems.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
 				.AddColumn("Номенклатура").SetDataProperty(node => node.NomenclatureString)
 				.AddColumn("Кол-во").AddNumericRenderer(node => node.Count)
 				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0))
@@ -52,7 +54,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
 				.Finish();
 
-			treeItemsFreeRent.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
+			treeAdditionalItems.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
 				.AddColumn("Номенклатура").SetDataProperty(node => node.NomenclatureString)
 				.AddColumn("Кол-во").AddNumericRenderer(node => node.Count)
 				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0))
@@ -69,7 +71,24 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
 				.Finish();
 
-			treeItemsPaidRent.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
+			treeFreeRentItems.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
+				.AddColumn("Номенклатура").SetDataProperty(node => node.NomenclatureString)
+				.AddColumn("Кол-во").AddNumericRenderer(node => node.Count)
+				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0))
+				.AddSetter((c, node) => c.Digits = node.Nomenclature.Unit == null ? 0 : (uint)node.Nomenclature.Unit.Digits)
+				.AddSetter((c, node) => c.Editable = node.CanEditAmount).WidthChars(10)
+				.AddTextRenderer(node => node.Nomenclature.Unit == null ? String.Empty : node.Nomenclature.Unit.Name, false)
+				.AddColumn("Цена").AddNumericRenderer(node => node.Price).Digits(2).WidthChars(10)
+				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0)).Editing(true)
+				.AddSetter((c, node) => c.Editable = Nomenclature.GetCategoriesWithEditablePrice().Contains(node.Nomenclature.Category))
+				.AddTextRenderer(node => CurrencyWorks.CurrencyShortName, false)
+				.AddColumn("В т.ч. НДС").AddTextRenderer(node => CurrencyWorks.GetShortCurrencyString(node.IncludeNDS))
+				.AddColumn("Сумма").AddTextRenderer(node => CurrencyWorks.GetShortCurrencyString(node.Sum))
+				.AddColumn("Скидка %").AddNumericRenderer(node => node.Discount)
+				.Adjustment(new Adjustment(0, 0, 100, 1, 100, 1)).Editing(true)
+				.Finish();
+
+			treePaidRentItems.ColumnsConfig = ColumnsConfigFactory.Create<OrderItem>()
 				.AddColumn("Номенклатура").SetDataProperty(node => node.NomenclatureString)
 				.AddColumn("Кол-во").AddNumericRenderer(node => node.Count)
 				.Adjustment(new Adjustment(0, 0, 1000000, 1, 100, 0))
@@ -107,9 +126,9 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		}
 
-		void ShowOrderItems()
+		void ShowEquipmentItems()
 		{
-			treeItems.SetItemsSource<OrderItem>(newOrderList);
+			treeEquipmentItems.SetItemsSource<OrderItem>(newOrderList);
 		}
 
 		protected void OnButtonAddForSaleClicked(object sender, EventArgs e)
@@ -119,10 +138,25 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				return;
 
 			var nomenclatureFilter = new NomenclatureRepFilter(UoW);
+			nomenclatureFilter.NomenCategory = NomenclatureCategory.equipment;
+			ReferenceRepresentation SelectDialog = new ReferenceRepresentation(new ViewModel.NomenclatureForSaleVM(nomenclatureFilter));
+			SelectDialog.Mode = OrmReferenceMode.Select;
+			SelectDialog.TabName = "Оборудование";
+			SelectDialog.ObjectSelected += NomenclatureForSaleSelected;
+			mytab.TabParent.AddSlaveTab(mytab, SelectDialog);
+		}
+
+		protected void OnButtonAdditionalClicked(object sender, EventArgs e)
+		{
+			ITdiTab mytab = TdiHelper.FindMyTab(this);
+			if(mytab == null)
+				return;
+
+			var nomenclatureFilter = new NomenclatureRepFilter(UoW);
 			nomenclatureFilter.NomenCategory = NomenclatureCategory.additional;
 			ReferenceRepresentation SelectDialog = new ReferenceRepresentation(new ViewModel.NomenclatureForSaleVM(nomenclatureFilter));
 			SelectDialog.Mode = OrmReferenceMode.Select;
-			SelectDialog.TabName = "Номенклатура на продажу";
+			SelectDialog.TabName = "Дополнительные товары";
 			SelectDialog.ObjectSelected += NomenclatureForSaleSelected;
 			mytab.TabParent.AddSlaveTab(mytab, SelectDialog);
 		}
@@ -144,13 +178,12 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 				Price = nomenclature.GetPrice(1)
 			});
 
-			ShowOrderItems();
+			ShowEquipmentItems();
 		}
 
 		public void SendResults()
 		{
-
-
+			
 			var result = new ScriptTreeObject {
 				ResultObjectType = newOrderList.GetType(),
 				ResultObject = newOrderList as object
@@ -162,5 +195,30 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 		{
 			SendResults();
 		}
+  
+		void ShowFreeRentItems(Order order)
+		{
+			var items = order.OrderItems.ToList();
+			resultFreeRentItems = new List<OrderItemWithSelect>();
+
+			foreach(OrderItem item in items) {
+				resultFreeRentItems.Add(new OrderItemWithSelect(item));
+			}
+
+			treeFreeRentItems.SetItemsSource<OrderItemWithSelect>(resultFreeRentItems);
+		}
+
+		void ShowPaidRentItems(Order order)
+		{
+			var items = order.OrderItems.ToList();
+			resultPaidRentItems = new List<OrderItemWithSelect>();
+
+			foreach(OrderItem item in items) {
+				resultPaidRentItems.Add(new OrderItemWithSelect(item));
+			}
+
+			treePaidRentItems.SetItemsSource<OrderItemWithSelect>(resultPaidRentItems);
+		}
+
 	}
 }

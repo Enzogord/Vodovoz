@@ -68,6 +68,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			return dlg;
 		}
 
+		#region Result parse
 		Counterparty GetCounterparty(Dictionary<string, ScriptTreeObject> results)
 		{
 			foreach(KeyValuePair<string, ScriptTreeObject> pair in results)
@@ -138,6 +139,8 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 			}
 			return returnBottles;
 		}
+
+		#endregion
 
 		protected void OnButtonGenerateDlgClicked(object sender, EventArgs e)
 		{

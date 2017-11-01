@@ -152,7 +152,7 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 			if(newOrderList.Count > 0)
 				foreach(OrderItem item in newOrderList) {
-					if(item.Nomenclature.Category == Domain.Goods.NomenclatureCategory.water) {
+					if(item.Nomenclature.Category == NomenclatureCategory.water) {
 						bottles += item.Count;
 						item.ReturnedCount = item.Count;
 					}
@@ -288,6 +288,13 @@ namespace Vodovoz.ViewWidgets.DialogueScriptWidgets
 
 		void ShowOrderItems(Order order)
 		{
+			if(order == null) {
+				MessageDialogWorks.RunInfoDialog(String.Format("По точке доставки не было заказов :\n*{0}", String.Join("\n*", dependencyDeliveryPoint.Address1c)));
+				buttonRepeateOrder.Sensitive = false;
+				buttonNewOrder.Sensitive = true;
+				return;
+			}
+			
 			var items = order.OrderItems.ToList();
 			resultOrderItems = new List<OrderItemWithSelect>();
 
