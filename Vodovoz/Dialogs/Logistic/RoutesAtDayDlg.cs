@@ -15,10 +15,12 @@ using QSTDI;
 using QSWidgetLib;
 using Vodovoz.Additions.Logistic;
 using Vodovoz.Additions.Logistic.RouteOptimization;
+using Vodovoz.Dialogs.Logistic;
 using Vodovoz.Domain.Employees;
 using Vodovoz.Domain.Goods;
 using Vodovoz.Domain.Logistic;
 using Vodovoz.Domain.Orders;
+using Vodovoz.Repository;
 using Vodovoz.Repository.Logistics;
 using Vodovoz.Tools.Logistic;
 
@@ -1319,6 +1321,16 @@ namespace Vodovoz
 				}
 			}
 		}
+
+		protected void OnLabel2WidgetEvent(object o, WidgetEventArgs args)
+		{
+			if(args.Event.Type == EventType.ButtonPress && (args.Event as EventButton).Button == 1) {
+				var user = EmployeeRepository.GetEmployeeForCurrentUser(uow);
+				if(user.User.Id != 94)
+					return;
+
+				TabParent.AddSlaveTab(this, new OptimizingParametersDlg());
+			}
+		}
 	}
 }
-

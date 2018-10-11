@@ -33,7 +33,7 @@ namespace Vodovoz.Additions.Logistic.RouteOptimization
 		/// <summary>
 		/// Штраф за поездку в отсутствующий в списке водителя район.
 		/// </summary>
-		public static long UnlikeDistrictPenalty = 100000;
+		public static long UnlikeDistrictPenalty = 20000;
 		/// <summary>
 		/// Штраф за передачу заказа другому водителю, если заказ уже находится в маршрутном листе сформированным до начала оптимизации.
 		/// </summary>
@@ -41,19 +41,19 @@ namespace Vodovoz.Additions.Logistic.RouteOptimization
 		/// <summary>
 		/// Штраф за каждый шаг приоритета к каждому адресу, в менее приоритеном районе.
 		/// </summary>
-		public static long DistrictPriorityPenalty = 1000;
+		public static long DistrictPriorityPenalty = 250;
 		/// <summary>
 		/// Штраф каждому менее приоритетному водителю, за единицу приоритета, при выходе на маршрут.
 		/// </summary>
-		public static long DriverPriorityPenalty = 10000;
+		public static long DriverPriorityPenalty = 1000;
 		/// <summary>
 		/// Штраф каждому менее приоритетному водителю на единицу приоритета, на каждом адресе.
 		/// </summary>
-		public static long DriverPriorityAddressPenalty = 800;
+		public static long DriverPriorityAddressPenalty = 500;
 		/// <summary>
 		/// Штраф за неотвезенный заказ. Или максимальное расстояние на которое имеет смысл ехать.
 		/// </summary>
-		public static long MaxDistanceAddressPenalty = 300000;
+		public static long MaxDistanceAddressPenalty = 300000;//15000
 		/// <summary>
 		/// Максимальное количество бутелей в заказе для ларгусов.
 		/// </summary>
@@ -66,11 +66,11 @@ namespace Vodovoz.Additions.Logistic.RouteOptimization
 		/// <summary>
 		/// Штраф обычному водителю если он взял себе адрес ларгуса.
 		/// </summary>
-		public static long SmallOrderNotLargusPenalty = 25000;
+		public static long SmallOrderNotLargusPenalty = 2500;
 		/// <summary>
 		/// Штраф за каждый адрес в маршруте меньше минимального позволенного в настройках машины <c>Car.MinRouteAddresses</c>.
 		/// </summary>
-		public static long MinAddressesInRoutePenalty = 50000;
+		public static long MinAddressesInRoutePenalty = 25000;
 		/// <summary>
 		/// Штраф за каждую бутыль в маршруте меньше минимального позволенного в настройках машины <c>Car.MinRouteAddresses</c>.
 		/// </summary>
@@ -283,7 +283,10 @@ namespace Vodovoz.Additions.Logistic.RouteOptimization
 			/// И в принцепе становится целесообразно только на количествах заказов 300-400. При количестве заказов менее 200
 			/// влючение отпечатков значений. Не уменьшало, а увеличивало общее время расчета. А при большом количестве заказов
 			/// время расчета уменьшалось не значительно.
-			search_parameters.FingerprintArcCostEvaluators = false;
+			//search_parameters.FingerprintArcCostEvaluators = false;
+
+			search_parameters.FingerprintArcCostEvaluators = true;
+
 			//search_parameters.OptimizationStep = 100;
 
 			var solver = routing.solver();
