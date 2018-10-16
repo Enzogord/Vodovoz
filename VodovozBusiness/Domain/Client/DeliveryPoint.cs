@@ -5,6 +5,7 @@ using System.Data.Bindings.Collections.Generic;
 using System.Linq;
 using Gamma.Utilities;
 using NetTopologySuite.Geometries;
+using QS.DomainModel.Entity;
 using QSOrmProject;
 using QSOsm;
 using QSOsm.DTO;
@@ -13,14 +14,17 @@ using Vodovoz.Domain.Employees;
 using QSOsm.Osrm;
 using QSContacts;
 using Vodovoz.Domain.Goods;
+using QS.DomainModel.UoW;
+using QS.HistoryLog;
 
 namespace Vodovoz.Domain.Client
 {
-	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Feminine,
+	[OrmSubject (Gender = GrammaticalGender.Feminine,
 		NominativePlural = "точки доставки",
 		Nominative = "точка доставки",
 		Accusative = "точки доставки"
 	)]
+	[HistoryTrace]
 	public class DeliveryPoint : PropertyChangedBase, IDomainObject
 	{
 		static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
@@ -69,6 +73,14 @@ namespace Vodovoz.Domain.Client
 			set { SetField (ref floor, value, () => Floor); }
 		}
 
+		EntranceType entranceType;
+
+		[Display(Name = "Тип входа")]
+		public virtual EntranceType EntranceType {
+			get { return entranceType; }
+			set { SetField(ref entranceType, value, () => EntranceType); }
+		}
+
 		string entrance;
 
 		[Display(Name = "Парадная")]
@@ -94,7 +106,7 @@ namespace Vodovoz.Domain.Client
 				if (!String.IsNullOrWhiteSpace (Letter))
 					address += String.Format ("лит.{0}, ", Letter);
 				if(!string.IsNullOrWhiteSpace(Entrance))
-					address += String.Format("пар.{0}, ", Entrance);
+					address += String.Format("{0} {1}, ", entranceType.GetEnumShortTitle(), Entrance);
 				if (!string.IsNullOrWhiteSpace(Floor))
 					address += String.Format ("эт.{0}, ", Floor);
 				if (!String.IsNullOrWhiteSpace (Room))
@@ -120,7 +132,7 @@ namespace Vodovoz.Domain.Client
 				if(!String.IsNullOrWhiteSpace(Letter))
 					address += String.Format("лит.{0}, ", Letter);
 				if(!string.IsNullOrWhiteSpace(Entrance))
-					address += String.Format("пар.{0}, ", Entrance);
+					address += String.Format("{0} {1}, ", entranceType.GetEnumShortTitle(), Entrance);
 				if(!string.IsNullOrWhiteSpace(Floor))
 					address += String.Format("эт.{0}, ", Floor);
 				if(!String.IsNullOrWhiteSpace(Room))
@@ -145,7 +157,7 @@ namespace Vodovoz.Domain.Client
 				if (!String.IsNullOrWhiteSpace (Letter))
 					address += String.Format ("лит.{0}, ", Letter);
 				if(!string.IsNullOrWhiteSpace(Entrance))
-					address += String.Format("пар.{0}, ", Entrance);
+					address += String.Format("{0} {1}, ", entranceType.GetEnumShortTitle(), Entrance);
 				if(!string.IsNullOrWhiteSpace(Floor))
 					address += String.Format("эт.{0}, ", Floor);
 				if (!String.IsNullOrWhiteSpace (Room))
@@ -462,6 +474,8 @@ namespace Vodovoz.Domain.Client
 			set { SetField(ref fixPrice5, value, () => FixPrice5); }
 		}
 
+
+
 		#endregion
 
 
@@ -569,7 +583,29 @@ namespace Vodovoz.Domain.Client
 			counterparty.DeliveryPoints.Add(point);
 			return point;
 		}
+	}
 
+	public enum EntranceType
+	{
+		[Display(Name = "Парадная", ShortName = "пар.")]
+		Entrance,
+		[Display(Name = "Торговый центр", ShortName = "ТЦ")]
+		TradeCenter,
+		[Display(Name = "Торговый комплекс", ShortName = "ТК")]
+		TradeComplex,
+		[Display(Name = "Бизнесс центр", ShortName = "БЦ")]
+		BusinessCenter,
+		[Display(Name = "Школа", ShortName = "шк.")]
+		School,
+		[Display(Name = "Общежитие", ShortName = "общ.")]
+		Hostel
+	}
+
+	public class EntranceTypeStringType : NHibernate.Type.EnumStringType
+	{
+		public EntranceTypeStringType() : base(typeof(EntranceType))
+		{
+		}
 	}
 }
 
