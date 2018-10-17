@@ -147,7 +147,7 @@ namespace Vodovoz.Additions.Logistic.RouteOptimization
 
 			var possibleRoutes = trips.ToArray();
 
-			if(possibleRoutes.Length == 0) {
+			if(!possibleRoutes.Any()) {
 				AddWarning("Для построения маршрутов, нет водителей.");
 				return;
 			}
@@ -165,19 +165,19 @@ namespace Vodovoz.Additions.Logistic.RouteOptimization
 				if(order.DeliveryPoint.Longitude == null || order.DeliveryPoint.Latitude == null)
 					continue;
 				var point = new Point((double)order.DeliveryPoint.Latitude.Value, (double)order.DeliveryPoint.Longitude.Value);
-				var aria = areas.Find(x => x.Geometry.Contains(point));
-				if(aria != null) {
+				var area = areas.Find(x => x.Geometry.Contains(point));
+				if(area != null) {
 					var oldRoute = Routes.FirstOrDefault(r => r.Addresses.Any(a => a.Order.Id == order.Id));
 					if(oldRoute != null)
-						calculatedOrders.Add(new CalculatedOrder(order, aria, false, oldRoute));
-					else if(possibleRoutes.SelectMany(x => x.Districts).Any(x => x.District.Id == aria.Id))
-						calculatedOrders.Add(new CalculatedOrder(order, aria));
-					else if(!unusedDistricts.Contains(aria))
-						unusedDistricts.Add(aria);
+						calculatedOrders.Add(new CalculatedOrder(order, area, false, oldRoute));
+					else if(possibleRoutes.SelectMany(x => x.Districts).Any(x => x.District.Id == area.Id))
+						calculatedOrders.Add(new CalculatedOrder(order, area));
+					else if(!unusedDistricts.Contains(area))
+						unusedDistricts.Add(area);
 				}
 			}
 			Nodes = calculatedOrders.ToArray();
-			if(unusedDistricts.Count > 0) {
+			if(unusedDistricts.Any()) {
 				AddWarning("Районы без водителей: {0}", String.Join(", ", unusedDistricts.Select(x => x.Name)));
 			}
 
