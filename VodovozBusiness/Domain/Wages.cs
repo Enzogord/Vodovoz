@@ -2,7 +2,8 @@
 
 namespace Vodovoz.Domain
 {
-	public class Wages{
+	[Obsolete("Переходим плавно на новый тип расчётов ЗП см. I-1616")]
+	public static class Wages{
 		public static Rates GetDriverRates(DateTime route_date, bool withForwarder=false){
 			var r = new Rates();
 			r.PhoneServiceCompensationRate = 2;

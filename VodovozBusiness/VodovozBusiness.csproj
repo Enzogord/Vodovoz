@@ -539,6 +539,9 @@
     <Compile Include="Domain\Payments\PaymentFromTinkoff.cs" />
     <Compile Include="HibernateMapping\Payments\PaymentFromTinkoffMap.cs" />
     <Compile Include="Repositories\Payments\PaymentsRepository.cs" />
+    <Compile Include="Domain\WageCalculation\WageCalcParameter.cs" />
+    <Compile Include="HibernateMapping\WageCalculation\WageCalcParameterMap.cs" />
+    <Compile Include="Repositories\WageCalculation\WageCalculationRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -566,6 +569,9 @@
     <Folder Include="Domain\Payments\" />
     <Folder Include="HibernateMapping\Payments\" />
     <Folder Include="Repositories\Payments\" />
+    <Folder Include="Domain\WageCalculation\" />
+    <Folder Include="HibernateMapping\WageCalculation\" />
+    <Folder Include="Repositories\WageCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QSProjects\Modules\QSBanks\QSBanks.csproj">

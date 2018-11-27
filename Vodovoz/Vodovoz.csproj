@@ -1044,6 +1044,10 @@
     <Compile Include="ServiceDialogs\PaymentsFromTinkoffParser.cs" />
     <Compile Include="ReportsParameters\Payments\PaymentsFromTinkoffReport.cs" />
     <Compile Include="gtk-gui\Vodovoz.ReportsParameters.Payments.PaymentsFromTinkoffReport.cs" />
+    <Compile Include="Dialogs\WageCalculation\WageCalcParametersDlg.cs" />
+    <Compile Include="gtk-gui\Vodovoz.Dialogs.WageCalculation.WageCalcParametersDlg.cs" />
+    <Compile Include="JournalViewers\WageCalculation\WageParametersView.cs" />
+    <Compile Include="gtk-gui\Vodovoz.JournalViewers.WageCalculation.WageParametersView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -1226,6 +1230,8 @@
     <Folder Include="DriverTerminal\" />
     <Folder Include="icons\map\points\" />
     <Folder Include="ReportsParameters\Payments\" />
+    <Folder Include="Dialogs\WageCalculation\" />
+    <Folder Include="JournalViewers\WageCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

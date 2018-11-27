@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using QS.DomainModel.Entity;
 using QS.DomainModel.UoW;
 using QS.HistoryLog;
-using QSOrmProject;
 using QSProjectsLib;
 using Vodovoz.Domain.Employees;
 using Vodovoz.Domain.Goods;
@@ -519,8 +518,8 @@ namespace Vodovoz.Domain.Logistic
 				break;
 			}
 			bool withForwarder = RouteList.Forwarder != null;
-			bool ich = RouteList.Car.IsCompanyHavings && !RouteList.NormalWage;
-			var rates = ich ? Wages.GetDriverRatesWithOurCar(RouteList.Date) : Wages.GetDriverRates(RouteList.Date, withForwarder);
+			bool their = RouteList.Car.IsCompanyHavings && !RouteList.NormalWage;
+			var rates = their ? Wages.GetDriverRatesWithOurCar(RouteList.Date) : Wages.GetDriverRates(RouteList.Date, withForwarder);
 
 			return CalculateWage(rates);
 		}
