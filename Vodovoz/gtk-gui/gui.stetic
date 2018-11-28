@@ -996,6 +996,12 @@
         <property name="ShortLabel" translatable="yes">Оплаты OnLine заказов</property>
         <signal name="Activated" handler="OnOnLineActionActivated" />
       </action>
+      <action id="ActionWageCalcParameters">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Параметры расчёта ЗП</property>
+        <property name="ShortLabel" translatable="yes">Параметры расчёта ЗП</property>
+        <signal name="Activated" handler="OnActionWageCalcParametersActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -1114,6 +1120,7 @@
                       <node type="Menuitem" action="ActionFineCommentTemplates" />
                       <node type="Menuitem" action="Action47" />
                     </node>
+                    <node type="Menuitem" action="ActionWageCalcParameters" />
                   </node>
                   <node type="Menu" action="Action31">
                     <node type="Menu" action="ActionReportOrders">

@@ -47,14 +47,34 @@ namespace Vodovoz.Domain.WagesCalculation
 
 		public override string ToString()
 		{
-			var title = String.Format(
-				"\"{0}\" {1} с {2}",
-				Name.GetEnumTitle(),
-				PeriodStart >= DateTime.Today ? "действует" : "действовал",
-				PeriodStart.ToString("d")
-			);
+			string title = "Неизвестное состояние параметра";
+			if(PeriodStart > DateTime.Today)
+				title = String.Format(
+					"\"{0}\" {1} с {2}",
+					Name.GetEnumTitle(), 
+					"будет действовать",
+					PeriodStart.ToString("d")
+				);
+			else if(PeriodStart <= DateTime.Today && !PeriodEnd.HasValue)
+				title = String.Format(
+					"\"{0}\" {1} с {2}",
+					Name.GetEnumTitle(),
+					"действует",
+					PeriodStart.ToString("d")
+				);
+			else if(PeriodEnd.HasValue)
+				title = String.Format(
+					"\"{0}\" {1} с {2} по {3}",
+					Name.GetEnumTitle(),
+					"действовал",
+					PeriodStart.ToString("d"),
+					PeriodEnd.Value.ToString("d")
+				);
+
 			return title;
 		}
+
+		public virtual bool IsEditable => PeriodStart > DateTime.Today && !PeriodEnd.HasValue;
 
 	}
 

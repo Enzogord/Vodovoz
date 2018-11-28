@@ -23,6 +23,7 @@ using Vodovoz.Domain.Logistic;
 using Vodovoz.Domain.Orders;
 using Vodovoz.Domain.Sale;
 using Vodovoz.Domain.Store;
+using Vodovoz.Domain.WagesCalculation;
 using Vodovoz.ReportsParameters;
 using Vodovoz.ReportsParameters.Payments;
 using Vodovoz.ReportsParameters.Store;
@@ -31,6 +32,8 @@ using Vodovoz.ServiceDialogs;
 using Vodovoz.ServiceDialogs.Database;
 using Vodovoz.SidePanel.InfoProviders;
 using Vodovoz.ViewModel;
+using Vodovoz.Dialogs.WageCalculation;
+using Vodovoz.JournalViewers.WageCalculation;
 
 public partial class MainWindow : Gtk.Window, IProgressBarDisplayable
 {
@@ -1060,7 +1063,7 @@ public partial class MainWindow : Gtk.Window, IProgressBarDisplayable
 				var dlg = new OrmReference(typeof(DeliveryPriceRule)) {
 					ButtonMode = right ? ReferenceButtonMode.CanAll : ReferenceButtonMode.None
 				};
-				return dlg; 
+				return dlg;
 			}
 		);
 	}
@@ -1071,5 +1074,22 @@ public partial class MainWindow : Gtk.Window, IProgressBarDisplayable
 			QSReport.ReportViewDlg.GenerateHashName<PaymentsFromTinkoffReport>(),
 			() => new QSReport.ReportViewDlg(new PaymentsFromTinkoffReport())
 		);
+	}
+
+	protected void OnActionWageCalcParametersActivated(object sender, EventArgs e)
+	{
+		//bool right = true;
+		//tdiMain.OpenTab(
+		//	OrmReference.GenerateHashName<WageCalcParameter>(),
+		//	() => new OrmReference(typeof(WageCalcParameter)) {
+		//		ButtonMode = right ? ReferenceButtonMode.CanAll : ReferenceButtonMode.None
+		//	}
+		//);
+
+		tdiMain.OpenTab(
+			TdiTabBase.GenerateHashName<WageParametersView>(),
+			() => new WageParametersView()
+		);
+
 	}
 }

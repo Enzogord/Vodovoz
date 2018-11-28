@@ -23,6 +23,7 @@ using Vodovoz.Dialogs.Employees;
 using Vodovoz.Dialogs.Goods;
 using Vodovoz.Dialogs.Logistic;
 using Vodovoz.Dialogs.Sale;
+using Vodovoz.Dialogs.WageCalculation;
 using Vodovoz.Domain;
 using Vodovoz.Domain.Accounting;
 using Vodovoz.Domain.Cash;
@@ -35,6 +36,7 @@ using Vodovoz.Domain.Orders;
 using Vodovoz.Domain.Sale;
 using Vodovoz.Domain.Service;
 using Vodovoz.Domain.Store;
+using Vodovoz.Domain.WagesCalculation;
 
 namespace Vodovoz
 {
@@ -230,6 +232,7 @@ namespace Vodovoz
 				   .Column("< 0,6л б.", x => x.Water600mlCount)
 				   .SearchColumn("Описание правила", x => x.ToString())
 				   .End();
+			OrmMain.AddObjectDescription<WageCalcParameter>().Dialog<WageCalcParametersDlg>();
 			#endregion
 
 			OrmMain.ClassMappingList.AddRange(QSBanks.QSBanksMain.GetModuleMaping());

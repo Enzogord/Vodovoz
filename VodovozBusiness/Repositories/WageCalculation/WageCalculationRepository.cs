@@ -18,7 +18,9 @@ namespace Vodovoz.Repositories.WageCalculation
 		{
 			var queryList = uow.Session.QueryOver<WageCalcParameter>()
 							   .Where(p => p.PeriodStart >= DateTime.Today)
-			                   .List();
+			                   .List()
+			                   //.FirstOrDefault()
+			                   ;
 			return queryList;
 		}
 	}

@@ -8,10 +8,13 @@ namespace Vodovoz.Dialogs.WageCalculation
 	[System.ComponentModel.ToolboxItem(false)]
 	public partial class WageCalcParametersDlg : EntityDialogBase<WageCalcParameter>
 	{
-		public WageCalcParametersDlg()
+		WageCalcParameterName paramName = WageCalcParameterName.PhoneServiceCompensationRate;
+
+		public WageCalcParametersDlg(WageCalcParameterName name)
 		{
 			this.Build();
 			UoWGeneric = UnitOfWorkFactory.CreateWithNewRoot<WageCalcParameter>();
+			paramName = name;
 			TabName = "Новый параметр расчёта зарплаты";
 			ConfigureDlg();
 		}
@@ -25,9 +28,15 @@ namespace Vodovoz.Dialogs.WageCalculation
 
 		void ConfigureDlg()
 		{
+			//удалить, после того как починим Session.IsDirty()
+			HasChanges = false;
+			UoW.CanCheckIfDirty = false;
+
 			enumCmbName.ItemsEnum = typeof(WageCalcParameterName);
 			enumCmbName.Binding.AddBinding(Entity, e => e.Name, w => w.SelectedItem).InitializeFromSource();
+			enumCmbName.SelectedItem = paramName;
 			yentValue.Binding.AddBinding(Entity, e => e.ParamValue, w => w.Text).InitializeFromSource();
+			ydtPeriodStart.IsEditable = true;
 			ydtPeriodStart.Binding.AddBinding(Entity, e => e.PeriodStart, w => w.DateOrNull).InitializeFromSource();
 
 			if(Entity.Id <= 0)
@@ -38,11 +47,14 @@ namespace Vodovoz.Dialogs.WageCalculation
 				yentValue.Sensitive = false;
 				ydtPeriodStart.Sensitive = false;
 			}
+			tblCurrentParameter.Sensitive = Entity.IsEditable;
 		}
 
 		public override bool Save()
 		{
-			throw new NotImplementedException();
+			UoW.Save(Entity);
+			UoW.Commit();
+			return true;
 		}
 	}
 }
