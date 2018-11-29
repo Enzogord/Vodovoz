@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Gtk;
-using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Dialect.Function;
-using NHibernate.Transform;
 using QS.DomainModel.UoW;
-using FluentNHibernate.Utils;
 using Vodovoz.Domain.WagesCalculation;
 
 namespace Vodovoz.Repositories.WageCalculation
@@ -17,10 +10,16 @@ namespace Vodovoz.Repositories.WageCalculation
 		public static IList<WageCalcParameter> GetActualParameters(IUnitOfWork uow)
 		{
 			var queryList = uow.Session.QueryOver<WageCalcParameter>()
-							   .Where(p => p.PeriodStart >= DateTime.Today)
-			                   .List()
-			                   //.FirstOrDefault()
-			                   ;
+							   .Where(p => p.PeriodEnd == null || p.PeriodEnd != null && p.PeriodEnd >= DateTime.Today)
+							   .List();
+			return queryList;
+		}
+
+		public static IList<WageCalcParameter> GetAllParametersWithName(IUnitOfWork uow, WageCalcParameterName name)
+		{
+			var queryList = uow.Session.QueryOver<WageCalcParameter>()
+							   .Where(p => p.Name == name)
+							   .List();
 			return queryList;
 		}
 	}

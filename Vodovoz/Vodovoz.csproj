@@ -1048,6 +1048,7 @@
     <Compile Include="gtk-gui\Vodovoz.Dialogs.WageCalculation.WageCalcParametersDlg.cs" />
     <Compile Include="JournalViewers\WageCalculation\WageParametersView.cs" />
     <Compile Include="gtk-gui\Vodovoz.JournalViewers.WageCalculation.WageParametersView.cs" />
+    <Compile Include="Representations\WageCalcParameterVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

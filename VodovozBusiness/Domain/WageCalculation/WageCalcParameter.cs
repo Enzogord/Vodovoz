@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using QS.DomainModel.Entity;
 using Gamma.Utilities;
+using QS.DomainModel.Entity;
 
 namespace Vodovoz.Domain.WagesCalculation
 {
@@ -9,7 +10,7 @@ namespace Vodovoz.Domain.WagesCalculation
 	[Appellative(Gender = GrammaticalGender.Masculine,
 		NominativePlural = "параметры расчёта заработной платы",
 		Nominative = "параметр расчёта заработной платы")]
-	public class WageCalcParameter : PropertyChangedBase, IDomainObject
+	public class WageCalcParameter : PropertyChangedBase, IDomainObject, IValidatableObject
 	{
 		#region Свойства
 
@@ -19,12 +20,12 @@ namespace Vodovoz.Domain.WagesCalculation
 		[Display(Name = "Имя параметра")]
 		public virtual WageCalcParameterName Name {
 			get => name;
-			protected set => SetField(ref name, value, () => Name);
+			set => SetField(ref name, value, () => Name);
 		}
 
-		string paramValue;
+		decimal paramValue;
 		[Display(Name = "Значение")]
-		public virtual string ParamValue {
+		public virtual decimal ParamValue {
 			get => paramValue;
 			set => SetField(ref paramValue, value, () => ParamValue);
 		}
@@ -51,7 +52,7 @@ namespace Vodovoz.Domain.WagesCalculation
 			if(PeriodStart > DateTime.Today)
 				title = String.Format(
 					"\"{0}\" {1} с {2}",
-					Name.GetEnumTitle(), 
+					Name.GetEnumTitle(),
 					"будет действовать",
 					PeriodStart.ToString("d")
 				);
@@ -62,7 +63,15 @@ namespace Vodovoz.Domain.WagesCalculation
 					"действует",
 					PeriodStart.ToString("d")
 				);
-			else if(PeriodEnd.HasValue)
+			else if(PeriodStart <= DateTime.Today && PeriodEnd.HasValue && PeriodEnd.Value >= DateTime.Today)
+				title = String.Format(
+					"\"{0}\" {1} с {2} по {3}",
+					Name.GetEnumTitle(),
+					"действует",
+					PeriodStart.ToString("d"),
+					PeriodEnd.Value.ToString("d")
+				);
+			else if(PeriodEnd.HasValue && PeriodEnd.Value < DateTime.Today)
 				title = String.Format(
 					"\"{0}\" {1} с {2} по {3}",
 					Name.GetEnumTitle(),
@@ -74,8 +83,34 @@ namespace Vodovoz.Domain.WagesCalculation
 			return title;
 		}
 
-		public virtual bool IsEditable => PeriodStart > DateTime.Today && !PeriodEnd.HasValue;
+		#region IValidatableObject implementation
 
+		public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+		{
+			if(PeriodStart <= DateTime.Today)
+				yield return new ValidationResult(
+					String.Format("Нельзя создавать параметры задним числом и редактировать действующие"),
+					new[] { this.GetPropertyName(o => o.PeriodStart) }
+				);
+
+			if(ParamValue <= 0m)
+				yield return new ValidationResult(
+					String.Format("Не указано значение параметра"),
+					new[] { this.GetPropertyName(o => o.ParamValue) }
+				);
+
+			if(PeriodEnd.HasValue && PeriodEnd.Value <= DateTime.Today)
+				yield return new ValidationResult(String.Format("Нельзя редактировать архивные параметры"),
+					new[] { this.GetPropertyName(o => o.PeriodStart) });
+		}
+
+		#endregion
+
+		public virtual string Title => ToString();
+
+		public virtual bool IsForFutureUse => PeriodStart > DateTime.Today;
+
+		public virtual bool IsActual => PeriodStart <= DateTime.Today && (!PeriodEnd.HasValue || PeriodEnd >= DateTime.Today);
 	}
 
 	public enum WageCalcParameterName

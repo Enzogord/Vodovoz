@@ -18,17 +18,17 @@ namespace Vodovoz.Dialogs.WageCalculation
 
 		private global::Gtk.Table tblCurrentParameter;
 
-		private global::Gamma.Widgets.yEnumComboBox enumCmbName;
-
 		private global::Gtk.Label lblName;
 
 		private global::Gtk.Label lblPeriodStart;
 
 		private global::Gtk.Label lblValue;
 
+		private global::Gamma.GtkWidgets.ySpinButton spnValue;
+
 		private global::Gamma.Widgets.yDatePicker ydtPeriodStart;
 
-		private global::Gamma.GtkWidgets.yEntry yentValue;
+		private global::Gamma.GtkWidgets.yEntry yentryName;
 
 		protected virtual void Build()
 		{
@@ -98,47 +98,52 @@ namespace Vodovoz.Dialogs.WageCalculation
 			this.tblCurrentParameter.RowSpacing = ((uint)(6));
 			this.tblCurrentParameter.ColumnSpacing = ((uint)(6));
 			// Container child tblCurrentParameter.Gtk.Table+TableChild
-			this.enumCmbName = new global::Gamma.Widgets.yEnumComboBox();
-			this.enumCmbName.Name = "enumCmbName";
-			this.enumCmbName.ShowSpecialStateAll = false;
-			this.enumCmbName.ShowSpecialStateNot = false;
-			this.enumCmbName.UseShortTitle = false;
-			this.enumCmbName.DefaultFirst = false;
-			this.tblCurrentParameter.Add(this.enumCmbName);
-			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.enumCmbName]));
-			w8.LeftAttach = ((uint)(1));
-			w8.RightAttach = ((uint)(2));
-			w8.XOptions = ((global::Gtk.AttachOptions)(4));
-			w8.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child tblCurrentParameter.Gtk.Table+TableChild
 			this.lblName = new global::Gtk.Label();
 			this.lblName.Name = "lblName";
 			this.lblName.Xalign = 1F;
 			this.lblName.LabelProp = global::Mono.Unix.Catalog.GetString("Имя параметра:");
 			this.tblCurrentParameter.Add(this.lblName);
-			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.lblName]));
-			w9.XOptions = ((global::Gtk.AttachOptions)(4));
-			w9.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.lblName]));
+			w8.XOptions = ((global::Gtk.AttachOptions)(4));
+			w8.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child tblCurrentParameter.Gtk.Table+TableChild
 			this.lblPeriodStart = new global::Gtk.Label();
 			this.lblPeriodStart.Name = "lblPeriodStart";
 			this.lblPeriodStart.Xalign = 1F;
 			this.lblPeriodStart.LabelProp = global::Mono.Unix.Catalog.GetString("Дата начала действия параметра:");
 			this.tblCurrentParameter.Add(this.lblPeriodStart);
-			global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.lblPeriodStart]));
-			w10.TopAttach = ((uint)(2));
-			w10.BottomAttach = ((uint)(3));
-			w10.XOptions = ((global::Gtk.AttachOptions)(4));
-			w10.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.lblPeriodStart]));
+			w9.TopAttach = ((uint)(2));
+			w9.BottomAttach = ((uint)(3));
+			w9.XOptions = ((global::Gtk.AttachOptions)(4));
+			w9.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child tblCurrentParameter.Gtk.Table+TableChild
 			this.lblValue = new global::Gtk.Label();
 			this.lblValue.Name = "lblValue";
 			this.lblValue.Xalign = 1F;
 			this.lblValue.LabelProp = global::Mono.Unix.Catalog.GetString("Значение параметра:");
 			this.tblCurrentParameter.Add(this.lblValue);
-			global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.lblValue]));
+			global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.lblValue]));
+			w10.TopAttach = ((uint)(1));
+			w10.BottomAttach = ((uint)(2));
+			w10.XOptions = ((global::Gtk.AttachOptions)(4));
+			w10.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child tblCurrentParameter.Gtk.Table+TableChild
+			this.spnValue = new global::Gamma.GtkWidgets.ySpinButton(0D, 99999999D, 1D);
+			this.spnValue.CanFocus = true;
+			this.spnValue.Name = "spnValue";
+			this.spnValue.Adjustment.PageIncrement = 10D;
+			this.spnValue.ClimbRate = 1D;
+			this.spnValue.Digits = ((uint)(2));
+			this.spnValue.Numeric = true;
+			this.spnValue.ValueAsDecimal = 0m;
+			this.spnValue.ValueAsInt = 0;
+			this.tblCurrentParameter.Add(this.spnValue);
+			global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.spnValue]));
 			w11.TopAttach = ((uint)(1));
 			w11.BottomAttach = ((uint)(2));
+			w11.LeftAttach = ((uint)(1));
+			w11.RightAttach = ((uint)(2));
 			w11.XOptions = ((global::Gtk.AttachOptions)(4));
 			w11.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child tblCurrentParameter.Gtk.Table+TableChild
@@ -158,15 +163,14 @@ namespace Vodovoz.Dialogs.WageCalculation
 			w12.XOptions = ((global::Gtk.AttachOptions)(4));
 			w12.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child tblCurrentParameter.Gtk.Table+TableChild
-			this.yentValue = new global::Gamma.GtkWidgets.yEntry();
-			this.yentValue.CanFocus = true;
-			this.yentValue.Name = "yentValue";
-			this.yentValue.IsEditable = true;
-			this.yentValue.InvisibleChar = '•';
-			this.tblCurrentParameter.Add(this.yentValue);
-			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.yentValue]));
-			w13.TopAttach = ((uint)(1));
-			w13.BottomAttach = ((uint)(2));
+			this.yentryName = new global::Gamma.GtkWidgets.yEntry();
+			this.yentryName.Sensitive = false;
+			this.yentryName.CanFocus = true;
+			this.yentryName.Name = "yentryName";
+			this.yentryName.IsEditable = true;
+			this.yentryName.InvisibleChar = '•';
+			this.tblCurrentParameter.Add(this.yentryName);
+			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.tblCurrentParameter[this.yentryName]));
 			w13.LeftAttach = ((uint)(1));
 			w13.RightAttach = ((uint)(2));
 			w13.XOptions = ((global::Gtk.AttachOptions)(4));

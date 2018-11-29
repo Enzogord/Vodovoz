@@ -14,7 +14,7 @@ namespace Vodovoz.HibernateMapping.WageCalculation
 			Map(x => x.Name).Column("name");
 			Map(x => x.ParamValue).Column("value");
 			Map(x => x.PeriodStart).Column("period_start");
-			//Map(x => x.PeriodEnd).Column("period_end");
+			Map(x => x.PeriodEnd).Column("period_end");
 		}
 	}
 }

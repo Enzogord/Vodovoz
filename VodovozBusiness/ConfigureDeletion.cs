@@ -19,6 +19,7 @@ using Vodovoz.Domain.Orders.Documents;
 using Vodovoz.Domain.Sale;
 using Vodovoz.Domain.Service;
 using Vodovoz.Domain.Store;
+using Vodovoz.Domain.WagesCalculation;
 
 namespace Vodovoz
 {
@@ -763,6 +764,12 @@ namespace Vodovoz
 						.AddDeleteCascadeDependence(x => x.Operation);
 
 			DeleteConfig.AddHibernateDeleteInfo<FineNomenclature>();
+
+			#endregion
+
+			#region Wages
+
+			DeleteConfig.AddHibernateDeleteInfo<WageCalcParameter>();
 
 			#endregion
 

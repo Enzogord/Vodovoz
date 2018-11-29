@@ -6,15 +6,21 @@ namespace Vodovoz.JournalViewers.WageCalculation
 	{
 		private global::Gtk.Table table4;
 
-		private global::Gtk.ScrolledWindow GtkScrolledWindow;
+		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 
-		private global::Gamma.GtkWidgets.yTreeView ytwParameters;
+		private global::QSOrmProject.RepresentationTreeView repTwParameters;
+
+		private global::Gtk.HBox hbox1;
+
+		private global::Gtk.Button btnRefresh;
 
 		private global::Gtk.HBox hbox4;
 
 		private global::QSOrmProject.EnumMenuButton ebtnAddParameter;
 
 		private global::Gtk.Button btnEdit;
+
+		private global::Gtk.Button btnDelete;
 
 		protected virtual void Build()
 		{
@@ -28,18 +34,38 @@ namespace Vodovoz.JournalViewers.WageCalculation
 			this.table4.RowSpacing = ((uint)(6));
 			this.table4.ColumnSpacing = ((uint)(6));
 			// Container child table4.Gtk.Table+TableChild
-			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
-			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
-			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
-			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.ytwParameters = new global::Gamma.GtkWidgets.yTreeView();
-			this.ytwParameters.CanFocus = true;
-			this.ytwParameters.Name = "ytwParameters";
-			this.GtkScrolledWindow.Add(this.ytwParameters);
-			this.table4.Add(this.GtkScrolledWindow);
-			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table4[this.GtkScrolledWindow]));
+			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow();
+			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
+			this.repTwParameters = new global::QSOrmProject.RepresentationTreeView();
+			this.repTwParameters.CanFocus = true;
+			this.repTwParameters.Name = "repTwParameters";
+			this.GtkScrolledWindow1.Add(this.repTwParameters);
+			this.table4.Add(this.GtkScrolledWindow1);
+			global::Gtk.Table.TableChild w2 = ((global::Gtk.Table.TableChild)(this.table4[this.GtkScrolledWindow1]));
 			w2.TopAttach = ((uint)(1));
 			w2.BottomAttach = ((uint)(2));
+			// Container child table4.Gtk.Table+TableChild
+			this.hbox1 = new global::Gtk.HBox();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.btnRefresh = new global::Gtk.Button();
+			this.btnRefresh.CanFocus = true;
+			this.btnRefresh.Name = "btnRefresh";
+			this.btnRefresh.UseUnderline = true;
+			this.btnRefresh.Label = global::Mono.Unix.Catalog.GetString("Обновить");
+			this.hbox1.Add(this.btnRefresh);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.btnRefresh]));
+			w3.PackType = ((global::Gtk.PackType)(1));
+			w3.Position = 2;
+			w3.Expand = false;
+			w3.Fill = false;
+			this.table4.Add(this.hbox1);
+			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table4[this.hbox1]));
+			w4.XOptions = ((global::Gtk.AttachOptions)(4));
+			w4.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table4.Gtk.Table+TableChild
 			this.hbox4 = new global::Gtk.HBox();
 			this.hbox4.Name = "hbox4";
@@ -50,12 +76,12 @@ namespace Vodovoz.JournalViewers.WageCalculation
 			this.ebtnAddParameter.Name = "ebtnAddParameter";
 			this.ebtnAddParameter.UseUnderline = true;
 			this.ebtnAddParameter.UseMarkup = false;
-			this.ebtnAddParameter.Label = global::Mono.Unix.Catalog.GetString("Добавить параметр");
+			this.ebtnAddParameter.Label = global::Mono.Unix.Catalog.GetString("Добавить...");
 			this.hbox4.Add(this.ebtnAddParameter);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.ebtnAddParameter]));
-			w3.Position = 0;
-			w3.Expand = false;
-			w3.Fill = false;
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.ebtnAddParameter]));
+			w5.Position = 0;
+			w5.Expand = false;
+			w5.Fill = false;
 			// Container child hbox4.Gtk.Box+BoxChild
 			this.btnEdit = new global::Gtk.Button();
 			this.btnEdit.CanFocus = true;
@@ -63,16 +89,28 @@ namespace Vodovoz.JournalViewers.WageCalculation
 			this.btnEdit.UseUnderline = true;
 			this.btnEdit.Label = global::Mono.Unix.Catalog.GetString("Изменить...");
 			this.hbox4.Add(this.btnEdit);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.btnEdit]));
-			w4.Position = 1;
-			w4.Expand = false;
-			w4.Fill = false;
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.btnEdit]));
+			w6.Position = 1;
+			w6.Expand = false;
+			w6.Fill = false;
+			// Container child hbox4.Gtk.Box+BoxChild
+			this.btnDelete = new global::Gtk.Button();
+			this.btnDelete.CanFocus = true;
+			this.btnDelete.Name = "btnDelete";
+			this.btnDelete.UseUnderline = true;
+			this.btnDelete.Label = global::Mono.Unix.Catalog.GetString("Удалить");
+			this.hbox4.Add(this.btnDelete);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox4[this.btnDelete]));
+			w7.PackType = ((global::Gtk.PackType)(1));
+			w7.Position = 2;
+			w7.Expand = false;
+			w7.Fill = false;
 			this.table4.Add(this.hbox4);
-			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table4[this.hbox4]));
-			w5.TopAttach = ((uint)(2));
-			w5.BottomAttach = ((uint)(3));
-			w5.XOptions = ((global::Gtk.AttachOptions)(4));
-			w5.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table4[this.hbox4]));
+			w8.TopAttach = ((uint)(2));
+			w8.BottomAttach = ((uint)(3));
+			w8.XOptions = ((global::Gtk.AttachOptions)(4));
+			w8.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.Add(this.table4);
 			if ((this.Child != null))
 			{
